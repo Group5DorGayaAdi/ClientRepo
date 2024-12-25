@@ -1,0 +1,104 @@
+﻿
+
+#games-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}
+
+.card {
+    background-color: #1e293b;
+    color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+    .card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .card .card-body {
+        padding: 15px;
+        flex-grow: 1;
+    }
+
+    .card .card-title {
+        font-size: 1.5rem;
+        margin: 0 0 10px;
+        color: #4caf50;
+    }
+
+    .card p {
+        margin: 5px 0;
+    }
+
+    .card .card-footer {
+        padding: 15px;
+        text-align: center;
+    }
+
+        .card .card-footer button {
+            background-color: #e53935;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+            .card .card-footer button:hover {
+                background-color: #d32f2f;
+            }
+.navbar {
+    background-color: #1e293b;
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.navbar-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.navbar-link {
+    color: #fff;
+
+    font-family: Nunito, sans-serif;
+    font-size: 1rem;
+}
+
+    .navbar-link:hover {
+        text-decoration: underline;
+    }
+
+.logout-btn {
+    background-color: #d32f2f;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    font-family: Nunito, sans-serif;
+}
+
+    .logout-btn:hover {
+        background-color: #9a0007;
+    }
