@@ -1,217 +1,232 @@
 ﻿<!DOCTYPE html>
 <html>
-<head>
+  <head>
     <meta charset="utf-8" />
     <title>Games</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Silkscreen:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
 
     <script src="../JS/ajaxcalls.js"></script>
     <script src="../JS/game.js"></script>
-    <link rel="stylesheet" href="../CSS/StyleSheet.css">
+    <link rel="stylesheet" href="../CSS/StyleSheet.css" />
     <script>
-        $(document).ready(function () {
-            let port = 7112;
-            server = `https://localhost:${port}/`;
-            api = server + "api/Games"
-            renderAvailableGames();
-        })
+      $(document).ready(function () {
+        let port = 7086;
+        server = `https://localhost:${port}/`;
+        api = server + "api/Games";
+        renderAvailableGames();
+      });
 
-        const getGameHTMLCard = (game) => {
+      const getGameHTMLCard = (game) => {
+        const platforms = [];
+        if (game.Windows == "TRUE") platforms.push("Windows");
+        if (game.Linux == "TRUE") platforms.push("Linux");
+        if (game.Mac == "TRUE") platforms.push("Mac");
 
-            const platforms = [];
-            if (game.Windows == "TRUE") platforms.push("Windows");
-            if (game.Linux == "TRUE") platforms.push("Linux");
-            if (game.Mac == "TRUE") platforms.push("Mac");
+        const platformText =
+          platforms.length > 0 ? platforms.join(", ") : "N/A";
 
-            const platformText = platforms.length > 0 ? platforms.join(", ") : "N/A";
+        const genres = (game.Genres || "")
+          .split(",")
+          .map((genre) => `<span>${genre.trim()}</span>`)
+          .join("");
 
-            const genres = (game.Genres || "").split(",").map(
-                (genre) => `<span>${genre.trim()}</span>`
-            ).join("");
-
-            const template = `
+        const template = `
                 <div class="card">
-                    <img class="card-img-top" src="${game.Header_image}" alt="${game.Name}" />
+                    <img class="card-img-top" src="${game.Header_image}" alt="${
+          game.Name
+        }" />
                     <div class="card-body">
                         <h5 class="card-title">${game.Name}</h5>
-                        <p><strong>Release Date:</strong> ${new Date(game.Release_date).toDateString()}</p>
-                        <p><strong>Price:</strong> ${game.Price === 0 ? "Free to Play" : `$${game.Price.toFixed(2)}`}</p>
+                        <p><strong>Release Date:</strong> ${new Date(
+                          game.Release_date
+                        ).toDateString()}</p>
+                        <p><strong>Price:</strong> ${
+                          game.Price === 0
+                            ? "Free to Play"
+                            : `$${game.Price.toFixed(2)}`
+                        }</p>
                         <p><strong>Platforms:</strong> ${platformText}</p>
                         <div class="genres">${genres}</div> <!-- Genres rendered as badges -->
-                        <p><strong>Publisher:</strong> ${game.Developers || "Unknown"}</p>
+                        <p><strong>Publisher:</strong> ${
+                          game.Developers || "Unknown"
+                        }</p>
                     </div>
                     <div class="card-footer">
-                        <button id="addToListBTN-${game.AppID}" class="add-to-list-btn">Add to Favorites</button>
+                        <button id="addToListBTN-${
+                          game.AppID
+                        }" class="add-to-list-btn">Add to Favorites</button>
                     </div>
                 </div>
             `;
 
-            const wrapper = document.createElement("div");
-            wrapper.className = "game-card";
-            wrapper.innerHTML = template;
+        const wrapper = document.createElement("div");
+        wrapper.className = "game-card";
+        wrapper.innerHTML = template;
 
-            const addToListButton = wrapper.querySelector(`#addToListBTN-${game.AppID}`);
-            addToListButton.addEventListener("click", () => addToFavorites(game));
+        const addToListButton = wrapper.querySelector(
+          `#addToListBTN-${game.AppID}`
+        );
+        addToListButton.addEventListener("click", () => addToFavorites(game));
 
-            return wrapper;
+        return wrapper;
+      };
 
+      function addToFavorites(game) {
+        const newGameToList = gamesList.find((g) => g.AppID == game.AppID);
+        if (newGameToList) {
+          let gameDet = {
+            AppID: newGameToList.AppID,
+            Name: newGameToList.Name,
+            ReleaseDate: new Date(newGameToList.Release_date).toISOString(),
+            Price: newGameToList.Price,
+            Description: newGameToList.description,
+            HeaderImage: newGameToList.Header_image,
+            Website: newGameToList.Website,
+            Windows: newGameToList.Windows.toUpperCase() === "TRUE",
+            Linux: newGameToList.Linux.toUpperCase() === "TRUE",
+            ScoreRank: newGameToList.Score_rank,
+            Recommendations: newGameToList.Recommendations,
+            Publisher: newGameToList.Developers,
+          };
 
-        };
-
-        function addToFavorites(game) {
-            const newGameToList = gamesList.find(g => g.AppID == game.AppID);
-            if (newGameToList) {
-                let gameDet = {
-                    AppID: newGameToList.AppID,
-                    Name: newGameToList.Name,
-                    ReleaseDate: new Date(newGameToList.Release_date).toISOString(), 
-                    Price: newGameToList.Price,
-                    Description: newGameToList.description,
-                    HeaderImage: newGameToList.Header_image,
-                    Website: newGameToList.Website,
-                    Windows: newGameToList.Windows.toUpperCase() === "TRUE", 
-                    Linux: newGameToList.Linux.toUpperCase() === "TRUE", 
-                    ScoreRank: newGameToList.Score_rank,
-                    Recommendations: newGameToList.Recommendations,
-                    Publisher: newGameToList.Developers 
-                };
-
-    
-                ajaxCall("POST", api, JSON.stringify(gameDet), () => {
-                    gamesList = gamesList.filter(g => g.AppID !== game.AppID);
-                    renderAvailableGames();
-                }, postECBF);
-            } else {
-                console.error(`Game with AppID ${game.AppID} not found`);
-            }
-
-
+          ajaxCall(
+            "POST",
+            api,
+            JSON.stringify(gameDet),
+            () => {
+              gamesList = gamesList.filter((g) => g.AppID !== game.AppID);
+              renderAvailableGames();
+            },
+            postECBF
+          );
+        } else {
+          console.error(`Game with AppID ${game.AppID} not found`);
         }
+      }
 
+      function postSCBF(status) {
+        console.log(status);
+      }
 
-        function postSCBF(status) {
-            console.log(status);
-        }
+      function postECBF(error) {
+        console.log(error);
+      }
 
-        function postECBF(error) {
-            console.log(error);
-        }
+      const getEmptyCardsHTMLTemplate = () => {
+        const templateWrapper = document.createElement("div");
+        templateWrapper.className = "empty-result";
 
-        const getEmptyCardsHTMLTemplate = () => {
-            const templateWrapper = document.createElement("div");
-            templateWrapper.className = "empty-result";
-
-            const template = `
+        const template = `
                       <h2>No Games Found</h2>
                       <p>We're sorry, but no Games match your search or filter criteria.</p>
                       <button id="clear-filter-btn" class="btn btn-dark">Clear search text</button>
                       `;
-            templateWrapper.innerHTML = template;
-            alert("change your Filters!");
-            return templateWrapper;
-        };
+        templateWrapper.innerHTML = template;
+        alert("change your Filters!");
+        return templateWrapper;
+      };
 
+      function getSCBF(status) {
+        console.log(status);
+      }
 
-        
+      function getECBF(error) {
+        console.log(error);
+      }
+      let gamesList = [...GAME];
 
-        function getSCBF(status) {
-            console.log(status);
+      const renderAvailableGames = () => {
+        const gameCards = gamesList.map(getGameHTMLCard);
+        const gamesPlaceholder = document.getElementById("game-cards");
+        gamesPlaceholder.innerHTML = "";
+        if (!gameCards.length) {
+          gamesPlaceholder.appendChild(getEmptyCardsHTMLTemplate());
         }
-
-        function getECBF(error) {
-            console.log(error);
-        }
-        let gamesList = [...GAME];
-        
-        const renderAvailableGames = () => {
-            const gameCards = gamesList.map(getGameHTMLCard);
-            const gamesPlaceholder = document.getElementById("game-cards");
-            gamesPlaceholder.innerHTML = "";
-            if (!gameCards.length) {
-                gamesPlaceholder.appendChild(getEmptyCardsHTMLTemplate());
-            }
-            gamesPlaceholder.append(...gameCards);
-        };
+        gamesPlaceholder.append(...gameCards);
+      };
     </script>
     <style>
+      body {
+        background-color: #0c1622;
+        color: #fff;
+        padding: 20px;
+      }
 
-        body {
-            background-color: #0c1622;
-            color: #fff;
-            padding: 20px;
-        }
+      h1 {
+        text-align: center;
+        font-family: Silkscreen;
+      }
 
-        h1 {
-            text-align: center;
-            font-family: Silkscreen;
-        }
+      .game-container {
+        font-family: Nunito;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+      }
 
-        .game-container {
-            font-family: Nunito;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-        }
+      .game-card {
+        width: 300px;
+        background-color: #1e293b;
+        border-radius: 10px;
+        padding: 15px;
+        text-align: left;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
 
-        .game-card {
-            width: 300px;
-            background-color: #1e293b;
-            border-radius: 10px;
-            padding: 15px;
-            text-align: left;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
+      .game-card button {
+        margin-top: 10px;
+        background-color: #4caf50;
+        color: #fff;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
 
-            .game-card button {
-                margin-top: 10px;
-                background-color: #4caf50;
-                color: #fff;
-                border: none;
-                padding: 10px 15px;
-                border-radius: 5px;
-                cursor: pointer;
-            }
+      .game-card button:hover {
+        background-color: #d32f2f;
+      }
+      .button-style {
+        display: inline-block;
+        padding: 10px 20px;
+        color: white;
+        text-decoration: none;
+        background-color: #ff001d; /* Button color */
+        border: none;
+        border-radius: 5px; /* Rounded corners */
+        font-size: 16px;
+        cursor: pointer; /* Changes cursor to pointer on hover */
+        text-align: center;
+      }
 
-                .game-card button:hover {
-                    background-color: #d32f2f;
-                }
-        .button-style {
-            display: inline-block;
-            padding: 10px 20px;
-            color: white;
-            text-decoration: none;
-            background-color: #ff001d; /* Button color */
-            border: none;
-            border-radius: 5px; /* Rounded corners */
-            font-size: 16px;
-            cursor: pointer; /* Changes cursor to pointer on hover */
-            text-align: center;
-        }
-
-            .button-style:hover {
-                background-color: #0056b3; /* Darker shade on hover */
-                text-decoration: none;
-            }
-
+      .button-style:hover {
+        background-color: #0056b3; /* Darker shade on hover */
+        text-decoration: none;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Navbar -->
     <nav class="navbar">
-        <div class="navbar-container">
-            <a href="LoginNew.html" class="navbar-link button-style">Log Out</a>
-            <a href="MyGames.html" class="navbar-link">User List</a>
-
-        </div>
+      <div class="navbar-container">
+        <a href="LoginNew.html" class="navbar-link button-style">Log Out</a>
+        <a href="MyGames.html" class="navbar-link">User List</a>
+      </div>
     </nav>
     <h1>Games List</h1>
     <div id="games-container">
-        <div id="game-cards" class="game-container"></div>
+      <div id="game-cards" class="game-container"></div>
     </div>
-</body>
+  </body>
 </html>
