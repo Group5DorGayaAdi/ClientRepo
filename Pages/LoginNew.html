@@ -94,11 +94,11 @@
 
           var email = $("#register-email").val();
           var pass = $("#register-password").val();
-          var id = $("#register-id").val();
+          //var id = $("#register-id").val();
 
           var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
           var passwordRegex = /^[A-Z0-9]+$/;
-          var idRegex = /^\d{9}$/;
+          //var idRegex = /^\d{9}$/;
 
           if (!emailRegex.test(email)) {
             swal.fire({
@@ -110,11 +110,11 @@
               icon: "error",
               title: "Invalid password",
             });
-          } else if (!idRegex.test(id)) {
-            swal.fire({
-              icon: "error",
-              title: "Invalid id number",
-            });
+            //   } else if (!idRegex.test(id)) {
+            //     swal.fire({
+            //       icon: "error",
+            //       title: "Invalid id number",
+            //     });
           } else {
             swal.fire({
               icon: "success",
@@ -125,7 +125,7 @@
               Name: $("#register-name").val(),
               Email: $("#register-email").val(),
               Password: $("#register-password").val(),
-              Id: $("#register-id").val(),
+              // Id: $("#register-id").val(),
             };
             ajaxCall(
               "POST",
@@ -174,8 +174,8 @@
           <label for="register-name">* Name:</label>
           <input type="text" id="register-name" name="Name" required />
 
-          <label for="register-id">* Id:</label>
-          <input type="text" id="register-id" name="id" required />
+          <!-- <label for="register-id">* Id:</label>
+          <input type="text" id="register-id" name="id" required /> -->
 
           <label for="register-email">* Email:</label>
           <input type="email" id="register-email" name="Email" required />
