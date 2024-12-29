@@ -3,6 +3,20 @@ $(document).ready(() => {
     const GamesList = [];
     GAME.forEach((game) => {
       const serverGame = {
+        // "appID": 0,
+        // "name": "string",
+        // "releaseDate": "2024-12-29T15:12:41.238Z",
+        // "price": 0,
+        // "description": "string",
+        // "headerImage": "string",
+        // "website": "string",
+        // "windows": true,
+        // "linux": true,
+        // "scoreRank": 0,
+        // "recommendations": "string",
+        // "publisher": "string",
+        // "numberOfPurchases": 0,
+        // "mac": true
         appID: game.AppID,
         name: game.Name,
         releaseDate: new Date(game.Release_date).toISOString(),
@@ -13,10 +27,10 @@ $(document).ready(() => {
         windows: game.Windows === "TRUE",
         mac: game.Mac === "TRUE",
         linux: game.Linux === "TRUE",
-        scoreRank: game.ScoreRank,
+        scoreRank: game.Score_rank,
         recommendations: game.Recommendations,
-        publisher: game.Publisher,
-        numberOfPurchases: game.NumberOfPurchases,
+        publisher: game.Developers,
+        numberOfPurchases: 0,
       };
       GamesList.push(serverGame);
     });
