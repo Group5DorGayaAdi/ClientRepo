@@ -13,16 +13,17 @@ $(document).ready(() => {
         windows: game.Windows === "TRUE",
         mac: game.Mac === "TRUE",
         linux: game.Linux === "TRUE",
-        scoreRank: game.Score_rank,
+        scoreRank: game.ScoreRank,
         recommendations: game.Recommendations,
-        publisher: game.Developers,
+        publisher: game.Publisher,
+        numberOfPurchases: game.NumberOfPurchases,
       };
       GamesList.push(serverGame);
     });
     console.log(GamesList);
 
     $.ajax({
-      url: "https://localhost:7086/api/Games/InitPostForAllGames",
+      url: "https://localhost:7048/api/Games/InitPostForAllGames",
       type: "POST",
       contentType: "application/json",
       data: JSON.stringify(GamesList),
