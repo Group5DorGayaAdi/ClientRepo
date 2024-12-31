@@ -1,197 +1,200 @@
 ﻿<!DOCTYPE html>
 <html>
-<head>
+  <head>
     <meta charset="utf-8" />
     <title>Login and Register</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-            crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Silkscreen:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../JS/ajaxcalls.js"></script>
     <link href="../CSS/LoginStyleSheet.css" rel="stylesheet" />
     <script>
+      $(document).ready(function () {
+        let port = 7048;
+        server = `https://localhost:${port}/`;
+        api = server + "api/Users";
 
-        $(document).ready(function () {
+        $("#register-form").hide();
 
-            let port = 7112;
-            server = `https://localhost:${port}/`;
-            api = server + "api/Users"
-
-            $("#register-form").hide();
-
-            $("#toggle-register").click(function () {
-                $("#register-form").show();
-                $("#login-form").hide();
-                $("#toggle-register").hide();
-            });
-
-            $("#login-form").submit(function (e) {
-
-                e.preventDefault();
-
-                var email = $("#login-email").val();
-                var pass = $("#login-password").val();
-
-                var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-                var passwordRegex = /^[A-Z0-9]+$/;
-
-                if (!emailRegex.test(email)) {
-                    swal.fire({
-                        icon: 'error',
-                        title: 'Invalid email'
-                    });
-                    const loginForm = document.getElementById("login-form");
-                    loginForm.reset();
-                }
-                else if (!passwordRegex.test(pass)) {
-                    swal.fire({
-                        icon: 'error',
-                        title: 'Invalid password'
-                    });
-                    const loginForm = document.getElementById("login-form");
-                    loginForm.reset();
-                }
-                else {
-                    swal.fire({
-                        icon: 'success',
-                        title: 'Form submitted successfully'
-                    });
-                    newUser = {
-                        Id: 0,
-                        Name: "",
-                        Email: $("#login-email").val(),
-                        Password: $("#login-password").val()
-                    }
-                    ajaxCall("POST", `${api}/Login`, JSON.stringify(newUser), getSCBF, getECBF);
-                    return false;
-                }
-
-              
-            })
-
-            function getSCBF(status) {
-                alert(status);
-                window.location.href = "./index.html";
-            }
-
-            function getECBF(err) {
-                console.log(err);
-                alert("Password or Email invalid. Try again or Register!")
-                const loginForm = document.getElementById("login-form");
-                loginForm.reset();
-            }
-
-            $("#register-form").submit(function (e) {
-
-                e.preventDefault();
-
-                var email = $("#register-email").val();
-                var pass = $("#register-password").val();
-                var id = $("#register-id").val();
-
-                var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-                var passwordRegex = /^[A-Z0-9]+$/;
-                var idRegex = /^\d{9}$/;
-
-                if (!emailRegex.test(email)) {
-                    swal.fire({
-                        icon: 'error',
-                        title: 'Invalid email'
-                    });
-
-                }
-                else if (!passwordRegex.test(pass)) {
-                    swal.fire({
-                        icon: 'error',
-                        title: 'Invalid password'
-                    });
-
-                }
-                else if (!idRegex.test(id)) {
-                    swal.fire({
-                        icon: 'error',
-                        title: 'Invalid id number'
-                    });
-
-                }
-                else {
-                    swal.fire({
-                        icon: 'success',
-                        title: 'Form submitted successfully'
-                    });
-                    alert("submited");
-                    const newUser = {
-                        Name: $("#register-name").val(),
-                        Email: $("#register-email").val(),
-                        Password: $("#register-password").val(),
-                        Id: $("#register-id").val()
-
-                    }
-                    ajaxCall("POST", `${api}/Register`, JSON.stringify(newUser), registerSCBF, registerECBF);
-
-                    return false;
-                }
-
-               
-            })
-
-            function registerSCBF(status) {
-                alert("Registration successful! Please log in.");
-                $("#register-form").hide(); // מחביא את טופס הרישום
-                $("#login-form").show();    // מציג את טופס ההתחברות
-                $("#toggle-register").show(); // מציג את כפתור הרישום
-            }
-
-            function registerECBF(err) {
-                console.log(err);
-            }
+        $("#toggle-register").click(function () {
+          $("#register-form").show();
+          $("#login-form").hide();
+          $("#toggle-register").hide();
         });
-    </script>
-</head>
-<body>
 
+        $("#login-form").submit(function (e) {
+          e.preventDefault();
+
+          var email = $("#login-email").val();
+          var pass = $("#login-password").val();
+
+          var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+          var passwordRegex = /^[A-Z0-9]+$/;
+
+          if (!emailRegex.test(email)) {
+            swal.fire({
+              icon: "error",
+              title: "Invalid email",
+            });
+            const loginForm = document.getElementById("login-form");
+            loginForm.reset();
+          } else if (!passwordRegex.test(pass)) {
+            swal.fire({
+              icon: "error",
+              title: "Invalid password",
+            });
+            const loginForm = document.getElementById("login-form");
+            loginForm.reset();
+          } else {
+            swal.fire({
+              icon: "success",
+              title: "Form submitted successfully",
+            });
+            newUser = {
+              Id: 0,
+              Name: "",
+              Email: $("#login-email").val(),
+              Password: $("#login-password").val(),
+            };
+            ajaxCall(
+              "POST",
+              `${api}/Login`,
+              JSON.stringify(newUser),
+              getSCBF,
+              getECBF
+            );
+            return false;
+          }
+        });
+
+        function getSCBF(status) {
+          //alert(status);
+          //alert(JSON.stringify(status));
+          alert("LOGIN");
+          window.location.href = "./index.html";
+        }
+
+        function getECBF(err) {
+          console.log(err);
+          alert("Password or Email invalid. Try again or Register!");
+          const loginForm = document.getElementById("login-form");
+          loginForm.reset();
+        }
+
+        $("#register-form").submit(function (e) {
+          e.preventDefault();
+
+          var email = $("#register-email").val();
+          var pass = $("#register-password").val();
+          //var id = $("#register-id").val();
+
+          var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+          var passwordRegex = /^[A-Z0-9]+$/;
+          //var idRegex = /^\d{9}$/;
+
+          if (!emailRegex.test(email)) {
+            swal.fire({
+              icon: "error",
+              title: "Invalid email",
+            });
+          } else if (!passwordRegex.test(pass)) {
+            swal.fire({
+              icon: "error",
+              title: "Invalid password",
+            });
+            //   } else if (!idRegex.test(id)) {
+            //     swal.fire({
+            //       icon: "error",
+            //       title: "Invalid id number",
+            //     });
+          } else {
+            swal.fire({
+              icon: "success",
+              title: "Form submitted successfully",
+            });
+            alert("submited");
+            const newUser = {
+              Name: $("#register-name").val(),
+              Email: $("#register-email").val(),
+              Password: $("#register-password").val(),
+              // Id: $("#register-id").val(),
+            };
+            ajaxCall(
+              "POST",
+              `${api}/Register`,
+              JSON.stringify(newUser),
+              registerSCBF,
+              registerECBF
+            );
+
+            return false;
+          }
+        });
+
+        function registerSCBF(status) {
+          alert("Registration successful! Please log in.");
+          $("#register-form").hide(); // מחביא את טופס הרישום
+          $("#login-form").show(); // מציג את טופס ההתחברות
+          $("#toggle-register").show(); // מציג את כפתור הרישום
+        }
+
+        function registerECBF(err) {
+          console.log(err);
+        }
+      });
+    </script>
+  </head>
+  <body>
     <h1>Welcome</h1>
     <div class="container">
-        <div class="login-section">
-            
-            <!-- Login Form -->
-            <form id="login-form" action="">
-                <h2>Login</h2>
-                <label for="login-email">Email:</label>
-                <input type="email" id="login-email" name="Email" required />
+      <div class="login-section">
+        <!-- Login Form -->
+        <form id="login-form" action="">
+          <h2>Login</h2>
+          <label for="login-email">Email:</label>
+          <input type="email" id="login-email" name="Email" required />
 
-                <label for="login-password">Password:</label>
-                <input type="password" id="login-password" name="Password" required />
+          <label for="login-password">Password:</label>
+          <input type="password" id="login-password" name="Password" required />
 
-                <input type="submit" value="Login" />
-            </form>
+          <input type="submit" value="Login" />
+        </form>
 
-            <!-- Register Form -->
-            <form id="register-form" action="">
-                <h2>Register</h2>
-                <label for="register-name">* Name:</label>
-                <input type="text" id="register-name" name="Name" required />
+        <!-- Register Form -->
+        <form id="register-form" action="">
+          <h2>Register</h2>
+          <label for="register-name">* Name:</label>
+          <input type="text" id="register-name" name="Name" required />
 
-                <label for="register-id">* Id:</label>
-                <input type="text" id="register-id" name="id" required />
+          <!-- <label for="register-id">* Id:</label>
+          <input type="text" id="register-id" name="id" required /> -->
 
-                <label for="register-email">* Email:</label>
-                <input type="email" id="register-email" name="Email" required/>
+          <label for="register-email">* Email:</label>
+          <input type="email" id="register-email" name="Email" required />
 
+          <label for="register-password">* Password:</label>
+          <input
+            type="password"
+            id="register-password"
+            name="Password"
+            required
+          />
 
-                <label for="register-password">* Password:</label>
-                <input type="password" id="register-password" name="Password" required/>
-
-                <input type="submit" value="Register" />
-            </form>
-        </div>
-        <div class="register-btn-section"></div>
-        <button id="toggle-register">New user? Register here</button>
+          <input type="submit" value="Register" />
+        </form>
+      </div>
+      <div class="register-btn-section"></div>
+      <button id="toggle-register">New user? Register here</button>
     </div>
-  
-</body>
+  </body>
 </html>
