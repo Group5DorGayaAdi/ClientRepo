@@ -73,13 +73,20 @@
               getSCBF,
               getECBF
             );
-            return false;
+            return status;
           }
         });
 
         function getSCBF(status) {
-          alert(status);
-          window.location.href = "./index.html";
+          //alert(status);
+          if (status == false) {
+            alert("User not found");
+            const loginForm = document.getElementById("login-form");
+            loginForm.reset();
+          } else {
+            alert("Welcome back!");
+            window.location.href = "./index.html";
+          }
         }
 
         function getECBF(err) {
