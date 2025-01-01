@@ -20,10 +20,12 @@
     <link rel="stylesheet" href="../CSS/StyleSheet.css" />
     <script>
       $(document).ready(function () {
-        let port = 7112;
+        let port = 7048;
         server = `https://localhost:${port}/`;
         api = server + "api/Games";
-        renderAvailableGames();
+        const userData = JSON.parse(localStorage.getItem("user"));
+        console.log(userData.name);
+        renderAvailableGames(userData.id);
       });
 
       const getGameHTMLCard = (game) => {
@@ -136,24 +138,34 @@
         return templateWrapper;
       };
 
-      function getSCBF(status) {
-        console.log(status);
-      }
-
-      function getECBF(error) {
-        console.log(error);
-      }
       let gamesList = [...GAME];
 
-      const renderAvailableGames = () => {
-        const gameCards = gamesList.map(getGameHTMLCard);
+      const renderAvailableGames = (id) => {
+        ajaxCall(
+          "GET",
+          `${api}/getUserGameList/id/${id}`,
+          "",
+          getSCBF,
+          getECBF
+        );
+        return status;
+      };
+
+      function getSCBF(status) {
+        console.log(status);
+        const myGamesList = status;
+        const gameCards = myGamesList.map(getGameHTMLCard);
         const gamesPlaceholder = document.getElementById("game-cards");
         gamesPlaceholder.innerHTML = "";
         if (!gameCards.length) {
           gamesPlaceholder.appendChild(getEmptyCardsHTMLTemplate());
         }
         gamesPlaceholder.append(...gameCards);
-      };
+      }
+
+      function getECBF(error) {
+        console.log(error);
+      }
     </script>
     <style>
       body {

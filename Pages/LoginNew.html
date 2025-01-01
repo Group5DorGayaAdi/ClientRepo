@@ -80,12 +80,13 @@
         function getSCBF(status) {
           //alert(status);
           //alert(JSON.stringify(status));
-          if (status == false) {
+          if (status == null) {
             alert("user not found");
             const loginForm = document.getElementById("login-form");
             loginForm.reset();
           } else {
-            alert(status);
+            alert("Welcome back");
+            localStorage.setItem("user", JSON.stringify(status));
             window.location.href = "./index.html";
           }
         }
