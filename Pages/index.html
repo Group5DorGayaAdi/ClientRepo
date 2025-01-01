@@ -23,16 +23,37 @@
         let port = 7048;
         server = `https://localhost:${port}/`;
         api = server + "api/Games";
-        const userData = JSON.parse(localStorage.getItem("user"));
-        console.log(userData.name);
+        userData = JSON.parse(localStorage.getItem("user"));
         renderAvailableGames(userData.id);
+        if (!userData) {
+          console.error("No user data found in local storage!");
+          window.location.href = "./LoginNew.html";
+          return;
+        }
+        getUserOnNavBar(userData);
+        console.log(userData.name);
       });
+
+      function getUserOnNavBar(userData) {
+        userDetailsPlaceHolder = document.getElementById("user-details");
+        if (!userDetailsPlaceHolder) {
+          console.error("Navbar placeHolder NOT FOUND");
+          return;
+        }
+        const detTemplate = ` 
+        <div class="currentUser" "> 
+          <div class="card-details"> 
+            <p id="card-current-name" class="card-text">Welcome ,  ${userData.name}</p>
+          </div> 
+        </div> `;
+        userDetailsPlaceHolder.innerHTML = detTemplate;
+      }
 
       const getGameHTMLCard = (game) => {
         const platforms = [];
-        if (game.windows == "TRUE") platforms.push("Windows");
-        if (game.linux == "TRUE") platforms.push("Linux");
-        if (game.mac == "TRUE") platforms.push("Mac");
+        if (game.windows == true) platforms.push("Windows");
+        if (game.linux == true) platforms.push("Linux");
+        if (game.mac == true) platforms.push("Mac");
 
         const platformText =
           platforms.length > 0 ? platforms.join(", ") : "N/A";
@@ -78,42 +99,40 @@
         const addToListButton = wrapper.querySelector(
           `#addToListBTN-${game.appID}`
         );
-        addToListButton.addEventListener("click", () => addToFavorites(game));
+        addToListButton.addEventListener("click", () =>
+          addToFavorites(game.appID, userData.id)
+        );
 
         return wrapper;
       };
 
-      function addToFavorites(game) {
-        const newGameToList = gamesList.find((g) => g.AppID == game.AppID);
-        if (newGameToList) {
-          let gameDet = {
-            AppID: newGameToList.AppID,
-            Name: newGameToList.Name,
-            ReleaseDate: new Date(newGameToList.Release_date).toISOString(),
-            Price: newGameToList.Price,
-            Description: newGameToList.description,
-            HeaderImage: newGameToList.Header_image,
-            Website: newGameToList.Website,
-            Windows: newGameToList.Windows.toUpperCase() === "TRUE",
-            Linux: newGameToList.Linux.toUpperCase() === "TRUE",
-            ScoreRank: newGameToList.Score_rank,
-            Recommendations: newGameToList.Recommendations,
-            Publisher: newGameToList.Developers,
-          };
+      function addToFavorites(appID, id) {
+        // const newGameToList = gamesList.find((g) => g.AppID == game.AppID);
+        // if (newGameToList) {
+        //   let gameDet = {
+        //     AppID: newGameToList.AppID,
+        //     Name: newGameToList.Name,
+        //     ReleaseDate: new Date(newGameToList.Release_date).toISOString(),
+        //     Price: newGameToList.Price,
+        //     Description: newGameToList.description,
+        //     HeaderImage: newGameToList.Header_image,
+        //     Website: newGameToList.Website,
+        //     Windows: newGameToList.Windows.toUpperCase() === "TRUE",
+        //     Linux: newGameToList.Linux.toUpperCase() === "TRUE",
+        //     ScoreRank: newGameToList.Score_rank,
+        //     Recommendations: newGameToList.Recommendations,
+        //     Publisher: newGameToList.Developers,
+        //   };
 
-          ajaxCall(
-            "POST",
-            api,
-            JSON.stringify(gameDet),
-            () => {
-              gamesList = gamesList.filter((g) => g.AppID !== game.AppID);
-              renderAvailableGames();
-            },
-            postECBF
-          );
-        } else {
-          console.error(`Game with AppID ${game.AppID} not found`);
-        }
+        ajaxCall(
+          "POST",
+          `${api}/addToFavorites/id/${id}/appID/${appID}`,
+          "",
+          () => {
+            renderAvailableGames(id);
+          },
+          postECBF
+        );
       }
 
       function postSCBF(status) {
@@ -138,7 +157,7 @@
         return templateWrapper;
       };
 
-      let gamesList = [...GAME];
+      //let gamesList = [...GAME];
 
       const renderAvailableGames = (id) => {
         ajaxCall(
@@ -226,17 +245,57 @@
         background-color: #0056b3; /* Darker shade on hover */
         text-decoration: none;
       }
+      /* .navbar ul.navbar-list {
+        width: 100%;
+        list-style: none;
+        background: #76a386;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        flex-wrap: wrap;
+        flex-direction: row;
+      } */
+
+      .top-page {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+      }
+
+      /* nav li {
+        height: 30px;
+        display: block;
+        align-items: center;
+        justify-content: center;
+        padding: 0 30px;
+        margin-top: 10px;
+      } */
     </style>
   </head>
   <body>
     <!-- Navbar -->
-    <nav class="navbar">
+    <!-- <nav class="navbar">
       <div class="navbar-container">
         <a href="LoginNew.html" class="navbar-link button-style">Log Out</a>
         <a href="MyGames.html" class="navbar-link">User List</a>
         <div id="user-name" class="navbar-username"></div>
       </div>
-    </nav>
+    </nav> -->
+    <!-- Navbar -->
+    <section class="top-page">
+      <nav class="navbar">
+        <!-- <div class="navbar-container"> -->
+        <ul id="navbar-list">
+          <li>
+            <a href="LoginNew.html" class="navbar-link button-style">Log Out</a>
+          </li>
+          <li><a href="MyGames.html" class="navbar-link">User List</a></li>
+          <li id="user-details" class="navbar-link"></li>
+        </ul>
+        <!-- </div> -->
+      </nav>
+    </section>
+
     <h1>Games List</h1>
     <div id="games-container">
       <div id="game-cards" class="game-container"></div>
