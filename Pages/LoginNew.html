@@ -73,15 +73,21 @@
               getSCBF,
               getECBF
             );
-            return false;
+            return status;
           }
         });
 
         function getSCBF(status) {
           //alert(status);
           //alert(JSON.stringify(status));
-          alert("LOGIN");
-          window.location.href = "./index.html";
+          if (status == false) {
+            alert("user not found");
+            const loginForm = document.getElementById("login-form");
+            loginForm.reset();
+          } else {
+            alert(status);
+            window.location.href = "./index.html";
+          }
         }
 
         function getECBF(err) {
@@ -122,7 +128,7 @@
               icon: "success",
               title: "Form submitted successfully",
             });
-            alert("submited");
+            // alert("submited");
             const newUser = {
               Name: $("#register-name").val(),
               Email: $("#register-email").val(),
@@ -137,15 +143,21 @@
               registerECBF
             );
 
-            return false;
+            return status;
           }
         });
 
         function registerSCBF(status) {
-          alert("Registration successful! Please log in.");
-          $("#register-form").hide(); // מחביא את טופס הרישום
-          $("#login-form").show(); // מציג את טופס ההתחברות
-          $("#toggle-register").show(); // מציג את כפתור הרישום
+          if (status == -1) {
+            alert("Email already exists , try again");
+            const RegisterForm = document.getElementById("register-form");
+            RegisterForm.reset();
+          } else {
+            alert("Registration successful! Please log in.");
+            $("#register-form").hide(); // מחביא את טופס הרישום
+            $("#login-form").show(); // מציג את טופס ההתחברות
+            $("#toggle-register").show(); // מציג את כפתור הרישום
+          }
         }
 
         function registerECBF(err) {
