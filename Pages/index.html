@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Games7</title>
+    <title>Games</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -20,17 +20,19 @@
     <link rel="stylesheet" href="../CSS/StyleSheet.css" />
     <script>
       $(document).ready(function () {
-        let port = 7112;
+        let port = 7048;
         server = `https://localhost:${port}/`;
         api = server + "api/Games";
-        renderAvailableGames();
+        const userData = JSON.parse(localStorage.getItem("user"));
+        console.log(userData.name);
+        renderAvailableGames(userData.id);
       });
 
       const getGameHTMLCard = (game) => {
         const platforms = [];
-        if (game.Windows == "TRUE") platforms.push("Windows");
-        if (game.Linux == "TRUE") platforms.push("Linux");
-        if (game.Mac == "TRUE") platforms.push("Mac");
+        if (game.windows == "TRUE") platforms.push("Windows");
+        if (game.linux == "TRUE") platforms.push("Linux");
+        if (game.mac == "TRUE") platforms.push("Mac");
 
         const platformText =
           platforms.length > 0 ? platforms.join(", ") : "N/A";
@@ -42,28 +44,28 @@
 
         const template = `
                 <div class="card">
-                    <img class="card-img-top" src="${game.Header_image}" alt="${
-          game.Name
+                    <img class="card-img-top" src="${game.headerImage}" alt="${
+          game.name
         }" />
                     <div class="card-body">
-                        <h5 class="card-title">${game.Name}</h5>
+                        <h5 class="card-title">${game.name}</h5>
                         <p><strong>Release Date:</strong> ${new Date(
-                          game.Release_date
+                          game.releaseDate
                         ).toDateString()}</p>
                         <p><strong>Price:</strong> ${
-                          game.Price === 0
+                          game.price === 0
                             ? "Free to Play"
-                            : `$${game.Price.toFixed(2)}`
+                            : `$${game.price.toFixed(2)}`
                         }</p>
                         <p><strong>Platforms:</strong> ${platformText}</p>
                         <div class="genres">${genres}</div> <!-- Genres rendered as badges -->
                         <p><strong>Publisher:</strong> ${
-                          game.Developers || "Unknown"
+                          game.publisher || "Unknown"
                         }</p>
                     </div>
                     <div class="card-footer">
                         <button id="addToListBTN-${
-                          game.AppID
+                          game.appID
                         }" class="add-to-list-btn">Add to Favorites</button>
                     </div>
                 </div>
@@ -74,7 +76,7 @@
         wrapper.innerHTML = template;
 
         const addToListButton = wrapper.querySelector(
-          `#addToListBTN-${game.AppID}`
+          `#addToListBTN-${game.appID}`
         );
         addToListButton.addEventListener("click", () => addToFavorites(game));
 
@@ -136,24 +138,34 @@
         return templateWrapper;
       };
 
-      function getSCBF(status) {
-        console.log(status);
-      }
-
-      function getECBF(error) {
-        console.log(error);
-      }
       let gamesList = [...GAME];
 
-      const renderAvailableGames = () => {
-        const gameCards = gamesList.map(getGameHTMLCard);
+      const renderAvailableGames = (id) => {
+        ajaxCall(
+          "GET",
+          `${api}/getUserGameList/id/${id}`,
+          "",
+          getSCBF,
+          getECBF
+        );
+        return status;
+      };
+
+      function getSCBF(status) {
+        console.log(status);
+        const myGamesList = status;
+        const gameCards = myGamesList.map(getGameHTMLCard);
         const gamesPlaceholder = document.getElementById("game-cards");
         gamesPlaceholder.innerHTML = "";
         if (!gameCards.length) {
           gamesPlaceholder.appendChild(getEmptyCardsHTMLTemplate());
         }
         gamesPlaceholder.append(...gameCards);
-      };
+      }
+
+      function getECBF(error) {
+        console.log(error);
+      }
     </script>
     <style>
       body {
@@ -222,6 +234,7 @@
       <div class="navbar-container">
         <a href="LoginNew.html" class="navbar-link button-style">Log Out</a>
         <a href="MyGames.html" class="navbar-link">User List</a>
+        <div id="user-name" class="navbar-username"></div>
       </div>
     </nav>
     <h1>Games List</h1>
