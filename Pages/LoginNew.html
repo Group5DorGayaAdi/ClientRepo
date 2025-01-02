@@ -17,6 +17,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../JS/ajaxcalls.js"></script>
+    <script src="../JS/navBar.js"></script>
     <link href="../CSS/LoginStyleSheet.css" rel="stylesheet" />
     <script>
       $(document).ready(function () {
@@ -30,6 +31,24 @@
           $("#register-form").show();
           $("#login-form").hide();
           $("#toggle-register").hide();
+        });
+
+        $("#cancel-register").click(function () {
+          Swal.fire({
+            title: "Are you sure?",
+            text: "Any unsaved changes will be lost.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, cancel",
+            cancelButtonText: "No, stay here",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              // Hide the form and reset fields
+              $("#register-form").hide();
+              $("#login-form").show();
+              $("#toggle-register").show();
+            }
+          });
         });
 
         $("#login-form").submit(function (e) {
@@ -56,10 +75,10 @@
             const loginForm = document.getElementById("login-form");
             loginForm.reset();
           } else {
-            swal.fire({
-              icon: "success",
-              title: "Form submitted successfully",
-            });
+            // swal.fire({
+            //   icon: "success",
+            //   title: "Form submitted successfully",
+            // });
             newUser = {
               Id: 0,
               Name: "",
@@ -78,16 +97,21 @@
         });
 
         function getSCBF(status) {
-          //alert(status);
-          //alert(JSON.stringify(status));
           if (status == null) {
             alert("user not found");
             const loginForm = document.getElementById("login-form");
             loginForm.reset();
           } else {
-            alert("Welcome back");
             localStorage.setItem("user", JSON.stringify(status));
-            window.location.href = "./index.html";
+            Swal.fire({
+              icon: "success",
+              title: "Welcome back!",
+              confirmButtonText: "OK",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.href = "./index.html";
+              }
+            });
           }
         }
 
@@ -125,10 +149,10 @@
             //       title: "Invalid id number",
             //     });
           } else {
-            swal.fire({
-              icon: "success",
-              title: "Form submitted successfully",
-            });
+            // swal.fire({
+            //   icon: "success",
+            //   title: "Form submitted successfully",
+            // });
             // alert("submited");
             const newUser = {
               Name: $("#register-name").val(),
@@ -154,10 +178,23 @@
             const RegisterForm = document.getElementById("register-form");
             RegisterForm.reset();
           } else {
-            alert("Registration successful! Please log in.");
-            $("#register-form").hide(); // מחביא את טופס הרישום
-            $("#login-form").show(); // מציג את טופס ההתחברות
-            $("#toggle-register").show(); // מציג את כפתור הרישום
+            // alert("Registration successful! Please log in.");
+            Swal.fire({
+              icon: "success",
+              title: "Registration successful!",
+              text: "You can now log in with your credentials.",
+              confirmButtonText: "OK",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                $("#register-form").hide();
+                $("#login-form").show();
+                $("#toggle-register").show();
+                $("#login-form").show();
+
+                const RegisterForm = document.getElementById("register-form");
+                RegisterForm.reset();
+              }
+            });
           }
         }
 
@@ -175,10 +212,22 @@
         <form id="login-form" action="">
           <h2>Login</h2>
           <label for="login-email">Email:</label>
-          <input type="email" id="login-email" name="Email" required />
+          <input
+            type="email"
+            id="login-email"
+            name="Email"
+            placeholder="Enter your Email"
+            required
+          />
 
           <label for="login-password">Password:</label>
-          <input type="password" id="login-password" name="Password" required />
+          <input
+            type="password"
+            id="login-password"
+            name="Password"
+            placeholder="Enter your Password"
+            required
+          />
 
           <input type="submit" value="Login" />
         </form>
@@ -187,23 +236,42 @@
         <form id="register-form" action="">
           <h2>Register</h2>
           <label for="register-name">* Name:</label>
-          <input type="text" id="register-name" name="Name" required />
+          <input
+            type="text"
+            id="register-name"
+            name="Name"
+            placeholder="Enter your Name"
+            required
+          />
 
           <!-- <label for="register-id">* Id:</label>
           <input type="text" id="register-id" name="id" required /> -->
 
           <label for="register-email">* Email:</label>
-          <input type="email" id="register-email" name="Email" required />
+          <input
+            type="email"
+            id="register-email"
+            name="Email"
+            placeholder="Enter your Email"
+            required
+          />
 
           <label for="register-password">* Password:</label>
           <input
             type="password"
             id="register-password"
             name="Password"
+            placeholder="Enter your Password"
             required
           />
 
-          <input type="submit" value="Register" />
+          <!-- <input type="submit" value="Register" /> -->
+          <div class="form-buttons">
+            <button type="button" id="cancel-register" class="cancel-btn">
+              Cancel
+            </button>
+            <input type="submit" value="Register" />
+          </div>
         </form>
       </div>
       <div class="register-btn-section"></div>

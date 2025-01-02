@@ -14,15 +14,40 @@
       integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../JS/ajaxcalls.js"></script>
     <script src="../JS/navBar.js"></script>
     <link rel="stylesheet" href="../CSS/StyleSheet.css" />
     <script>
       const serverUrl = "https://localhost:7048/api/Games";
-      let gamesArray = [];
+      const serverU = "https://localhost:7048/api/Users";
+      //let gamesArray = [];
 
       $(document).ready(function () {
+        // let port = 7048;
+        // server = `https://localhost:${port}/`;
+        // api = server + "api/Users";
+        $("#update-form").hide();
         fetchGames(userData.id);
+
+        const togglePassword = document.getElementById("toggle-password");
+        const passwordInput = document.getElementById("updated-password");
+
+        // Check if both elements exist
+        if (togglePassword && passwordInput) {
+          togglePassword.addEventListener("click", () => {
+            if (passwordInput.type === "password") {
+              passwordInput.type = "text";
+              togglePassword.textContent = "🙈 Hide";
+            } else {
+              passwordInput.type = "password";
+              togglePassword.textContent = "👁️ Show";
+            }
+          });
+        } else {
+          console.error("Password input or toggle button not found.");
+        }
+
         if (!userData) {
           console.error("No user data found in local storage!");
           window.location.href = "./LoginNew.html";
@@ -31,30 +56,132 @@
 
         getUserOnNavBar(userData);
 
-        document
-          .getElementById("filter-price-btn")
-          .addEventListener("click", () => {
-            const price = document.getElementById("price-input").value;
-            if (price) {
-              fetchFilteredGamesByPrice(price);
-            } else {
-              const zero = 0;
-              fetchFilteredGamesByPrice(zero);
-            }
-          });
+        $("#update-details").click(function () {
+          $("#update-form").show();
+          $("#filter-controls").hide();
+          $("#my-wish-list").hide();
+          $("#game-container").hide();
+          document.getElementById("updated-name").value = userData.name || "";
+          document.getElementById("updated-email").value = userData.email || "";
+          document.getElementById("updated-password").value =
+            userData.password || "";
+        });
 
-        document
-          .getElementById("filter-rank-btn")
-          .addEventListener("click", () => {
-            const rank = document.getElementById("rank-input").value;
-            if (rank) {
-              fetchFilteredGamesByRank(rank);
-            } else {
-              const zero = 0;
-              fetchFilteredGamesByRank(zero);
+        $("#cancel-update").click(function () {
+          Swal.fire({
+            title: "Are you sure?",
+            text: "Any unsaved changes will be lost.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, cancel",
+            cancelButtonText: "No, stay here",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              // Hide the form and reset fields
+              $("#update-form").hide();
+              $("#filter-controls").show();
+              $("#my-wish-list").show();
+              $("#game-container").show();
             }
           });
+        });
+        $("#update-form").submit(function (e) {
+          e.preventDefault();
+
+          var email = $("#updated-email").val();
+          var pass = $("#updated-password").val();
+          //var id = $("#register-id").val();
+
+          var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+          var passwordRegex = /^[A-Z0-9]+$/;
+          //var idRegex = /^\d{9}$/;
+
+          if (!emailRegex.test(email)) {
+            Swal.fire({
+              icon: "error",
+              title: "Invalid email",
+            });
+          } else if (!passwordRegex.test(pass)) {
+            Swal.fire({
+              icon: "error",
+              title: "Invalid password",
+            });
+          } else {
+            // Swal.fire({
+            //   icon: "success",
+            //   title: "Form submitted successfully",
+            // });
+            const newUser = {
+              Name: $("#updated-name").val(),
+              Email: $("#updated-email").val(),
+              Password: $("#updated-password").val(),
+            };
+            ajaxCall(
+              "PUT",
+              `${serverU}/${userData.id}`,
+              JSON.stringify(newUser),
+              updateSCBF,
+              updateECBF
+            );
+
+            return status;
+          }
+        });
       });
+
+      function updateSCBF(status) {
+        if (status == -1) {
+          alert("Email already exists , try again");
+          // const updateForm = document.getElementById("update-form");
+          // RegisterForm.reset();
+          document.getElementById("updated-name").value = userData.name || "";
+          document.getElementById("updated-email").value = userData.email || "";
+          document.getElementById("updated-password").value =
+            userData.password || "";
+        } else {
+          //alert("Updated successful! Please log in.");
+          Swal.fire({
+            icon: "success",
+            title: "Your details were updated!",
+            confirmButtonText: "OK",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $("#update-form").hide();
+              $("#filter-controls").show();
+              $("#my-wish-list").show();
+              $("#game-container").show();
+            }
+          });
+        }
+      }
+
+      function updateECBF(err) {
+        console.log(err);
+      }
+
+      document
+        .getElementById("filter-price-btn")
+        .addEventListener("click", () => {
+          const price = document.getElementById("price-input").value;
+          if (price) {
+            fetchFilteredGamesByPrice(price);
+          } else {
+            const zero = 0;
+            fetchFilteredGamesByPrice(zero);
+          }
+        });
+
+      document
+        .getElementById("filter-rank-btn")
+        .addEventListener("click", () => {
+          const rank = document.getElementById("rank-input").value;
+          if (rank) {
+            fetchFilteredGamesByRank(rank);
+          } else {
+            const zero = 0;
+            fetchFilteredGamesByRank(zero);
+          }
+        });
 
       function fetchFilteredGamesByPrice(price) {
         ajaxCall(
@@ -107,57 +234,66 @@
 
         games.forEach((game) => {
           const template = `
-                     <div class="card">
-             <img class="card-img-top" src="${game.headerImage}" alt="${
-            game.name
-          }" />
-             <div class="card-body">
-                 <h5 class="card-title">${game.name}</h5>
-                 <p><strong>Release Date:</strong> ${new Date(
-                   game.releaseDate
-                 ).toDateString()}</p>
-                 <p><strong>Price:</strong> ${
-                   game.price === 0
-                     ? "Free to Play"
-                     : `$${game.price.toFixed(2)}`
-                 }</p>
-                 <p><strong>Rank Score:</strong> ${game.scoreRank}</p>
-                 <p><strong>Publisher:</strong> ${
-                   game.publisher || "Unknown"
-                 }</p>
-             </div>
-                    <div class="card-footer">
-                    <button class="delete-btn" data-id="${
-                      game.appID
-                    }">Delete</button>
-                    </div>
-                     </div>
-                `;
+                       <div class="card">
+                          <img class="card-img-top" src="${
+                            game.headerImage
+                          }" alt="${game.name}" />
+                              <div class="card-body">
+                                  <h5 class="card-title">${game.name}</h5>
+                                  <p><strong>Release Date:</strong> ${new Date(
+                                    game.releaseDate
+                                  ).toDateString()}</p>
+                                  <p><strong>Price:</strong> ${
+                                    game.price === 0
+                                      ? "Free to Play"
+                                      : `$${game.price.toFixed(2)}`
+                                  }</p>
+                                  <p><strong>Rank Score:</strong> ${
+                                    game.scoreRank
+                                  }</p>
+                                  <p><strong>Publisher:</strong> ${
+                                    game.publisher || "Unknown"
+                                  }</p>
+                        </div>
+                        <div class="card-footer">
+                          <button class="delete-btn" data-id="${
+                            game.appID
+                          }">Delete</button>
+                        </div>
+                       </div>`;
 
           const wrapper = document.createElement("div");
           wrapper.className = "game-card";
           wrapper.innerHTML = template;
 
           const deleteButton = wrapper.querySelector(".delete-btn");
-          deleteButton.addEventListener("click", () => deleteGame(game.appID));
+          deleteButton.addEventListener("click", () =>
+            deleteGame(game.appID, game.name)
+          );
 
           container.appendChild(wrapper);
         });
       }
 
-      function deleteGame(appID) {
+      function deleteGame(appID, name) {
         console.log(`Attempting to delete game with ID: ${appID}`);
-
         ajaxCall(
           "DELETE",
           `${serverUrl}/DeleteByID/id/${userData.id}/appID/${appID}`,
           "",
           () => {
-            console.log(`Game with ID: ${appID} successfully deleted.`);
+            Swal.fire({
+              icon: "success",
+              title: `The Game: ${name} was successfully deleted.`,
+            });
             fetchGames(userData.id);
           },
           (error) => {
             console.error(`Failed to delete game with ID: ${appID}`, error);
+            Swal.fire({
+              icon: "error",
+              title: `Failed to delete the Game: ${name}.`,
+            });
             alert("Failed to delete the game. Please try again.");
           }
         );
@@ -263,6 +399,9 @@
         <!-- <div class="navbar-container"> -->
         <ul id="navbar-list">
           <li id="user-details" class="navbar-link"></li>
+          <li id="update-details" class="navbar-link button-style">
+            Edit/View Profile
+          </li>
           <li>
             <a href="LoginNew.html" class="navbar-link button-style">Log Out</a>
           </li>
@@ -271,14 +410,36 @@
         <!-- </div> -->
       </nav>
     </section>
-    <h1>My Games</h1>
-    <div class="filter-controls">
+    <h1 id="my-wish-list">My Games</h1>
+    <div id="filter-controls" class="filter-controls">
       <input id="price-input" type="number" placeholder="Enter minimum price" />
       <button id="filter-price-btn">Filter by Price</button>
 
       <input id="rank-input" type="number" placeholder="Enter minimum rank" />
       <button id="filter-rank-btn">Filter by Rank</button>
     </div>
+    <form id="update-form" action="">
+      <h2>My Details</h2>
+      <label for="register-name">Name:</label>
+      <input type="text" id="updated-name" name="Name" required />
+
+      <label for="register-email">Email:</label>
+      <input type="email" id="updated-email" name="Email" required />
+
+      <label for="register-password">Password:</label>
+      <div class="password-container">
+        <input type="password" id="updated-password" name="Password" required />
+        <button type="button" id="toggle-password" class="toggle-password-btn">
+          👁️ Show
+        </button>
+      </div>
+      <div class="form-buttons">
+        <button type="button" id="cancel-update" class="cancel-btn">
+          Cancel
+        </button>
+        <input type="submit" value="Update" />
+      </div>
+    </form>
     <div class="game-container" id="game-container"></div>
   </body>
 </html>

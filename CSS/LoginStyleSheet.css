@@ -1,93 +1,121 @@
 ﻿body {
-    background: linear-gradient(135deg, #9c9bb5, #1e1616);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    margin: 0;
+  background: linear-gradient(135deg, #9c9bb5, #1e1616);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
 }
 
 h1 {
-    font-family: Silkscreen;
-    margin-bottom: 20px;
-    font-size: 2.5rem;
-    color: #e7e8ee;
+  font-family: Silkscreen;
+  margin-bottom: 20px;
+  font-size: 2.5rem;
+  color: #e7e8ee;
 }
 
 h2 {
-    color: #e7e8ee;
+  color: #e7e8ee;
 }
 
 .container {
-    font-family: Nunito;
-    background-color: #f3f4f526;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    border-radius: 20px;
-    padding: 30px;
-    width: 350px;
-    text-align: center;
+  font-family: Nunito;
+  background-color: #f3f4f526;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  padding: 30px;
+  width: 350px;
+  text-align: center;
 }
 
 .login-section form,
 .login-section button {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 
 .login-section form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .login-section label {
-    font-size: 0.9rem;
-    color: #e7e8ee;
-    text-align: left;
+  font-size: 0.9rem;
+  color: #e7e8ee;
+  text-align: left;
 }
 
 .login-section input[type="email"],
 .login-section input[type="password"],
 .login-section input[type="text"] {
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-    width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  width: 100%;
 }
 
 .login-section input[type="submit"] {
-    background-color: #5d41bc;
-    color: white;
-    padding: 12px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  background-color: #5d41bc;
+  color: white;
+  /* padding: 12px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s; */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  font-family: "Nunito", sans-serif;
 }
 
-    .login-section input[type="submit"]:hover {
-        background-color: #ff4a4a;
-    }
+.login-section input[type="submit"]:hover {
+  background-color: #ff4a4a;
+}
 
 #toggle-register {
-    background-color: #ffffff52;
-    color: #5d41bc;
-    border: 2px solid #5d41bc;
-    border-radius: 5px;
-    padding: 10px;
-    font-size: 1rem;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: all 0.3s ease;
+  background-color: #ffffff52;
+  color: #5d41bc;
+  border: 2px solid #5d41bc;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.3s ease;
 }
 
-    #toggle-register:hover {
-        background-color: #ff6b6b;
-        color: white;
-    }
+#toggle-register:hover {
+  background-color: #ff6b6b;
+  color: white;
+}
 
 .register-btn-section {
-    margin-top: 20px;
+  margin-top: 20px;
+}
+
+.cancel-btn {
+  background-color: #d32f2f; /* Red for cancel */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  font-family: "Nunito", sans-serif;
+}
+
+.cancel-btn:hover {
+  background-color: #9a0007;
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: space-between; /* Space buttons apart */
+  gap: 10px;
+  margin-top: 20px;
 }

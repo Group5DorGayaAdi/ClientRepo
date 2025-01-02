@@ -167,3 +167,131 @@
 .logout-btn:hover {
   background-color: #9a0007;
 }
+
+/* ✅ Update Form Styling */
+#update-form {
+  background: linear-gradient(
+    to bottom,
+    #6f627e,
+    #4f455a
+  ); /* Gradient Background */
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  padding: 30px;
+  max-width: 400px;
+  margin: 50px auto;
+  font-family: "Nunito", sans-serif;
+  text-align: center;
+}
+
+/* ✅ Form Title */
+#update-form h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+/* ✅ Form Labels */
+#update-form label {
+  display: block;
+  text-align: left;
+  margin: 10px 0 5px;
+  font-size: 14px;
+  color: #e0e0e0;
+}
+
+/* ✅ Form Inputs */
+#update-form input[type="text"],
+#update-form input[type="email"],
+#update-form input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+/* ✅ Password Toggle Button */
+#update-form .password-container {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+#update-form .password-container input {
+  width: 100%;
+  padding-right: 40px;
+}
+
+#update-form .password-container .toggle-password-btn {
+  position: absolute;
+  right: 10px;
+  top: 30%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #6f627e;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+#update-form .password-container .toggle-password-btn:hover {
+  color: #4f455a;
+}
+
+/* ✅ Submit Button */
+/* ✅ Form Buttons Container */
+.form-buttons {
+  display: flex;
+  justify-content: space-between; /* Space buttons apart */
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* ✅ Cancel Button */
+.cancel-btn {
+  background-color: #d32f2f; /* Red for cancel */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  font-family: "Nunito", sans-serif;
+}
+
+.cancel-btn:hover {
+  background-color: #9a0007;
+}
+
+/* ✅ Update Button (Submit) */
+#update-form input[type="submit"] {
+  background-color: #6a37d6; /* Purple color */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  font-family: "Nunito", sans-serif;
+}
+
+#update-form input[type="submit"]:hover {
+  background-color: #5725b4;
+}
+
+/* ✅ Optional: Responsive Styling */
+@media (max-width: 480px) {
+  #update-form {
+    padding: 20px;
+  }
+
+  #update-form h2 {
+    font-size: 20px;
+  }
+
+  #update-form input[type="submit"] {
+    font-size: 14px;
+  }
+}
