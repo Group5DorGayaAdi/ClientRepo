@@ -92,6 +92,13 @@
   padding: 5px 10px;
   transition: color 0.3s ease;
 }
+#navbar-right-side {
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 40px;
+}
 
 /* .card-details {
   font-family: "Nunito", sans-serif;

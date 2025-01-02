@@ -391,23 +391,28 @@
         background-color: #0056b3;
         text-decoration: none;
       }
+
+      .top-page {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+      }
     </style>
   </head>
   <body>
     <section class="top-page">
       <nav class="navbar">
-        <!-- <div class="navbar-container"> -->
-        <ul id="navbar-list">
-          <li id="user-details" class="navbar-link"></li>
-          <!-- <li id="update-details" class="navbar-link button-style">
-            Edit/View Profile
-          </li> -->
-          <li>
-            <a href="LoginNew.html" class="navbar-link button-style">Log Out</a>
-          </li>
-          <li><a href="index.html" class="navbar-link">All Games</a></li>
-        </ul>
-        <!-- </div> -->
+        <div id="navbar-list">
+          <div id="user-details" class="navbar-link"></div>
+          <div id="navbar-right-side">
+            <div><a href="index.html" class="navbar-link">All Games</a></div>
+            <div>
+              <a href="LoginNew.html" class="navbar-link button-style"
+                >Log Out</a
+              >
+            </div>
+          </div>
+        </div>
       </nav>
     </section>
     <button
