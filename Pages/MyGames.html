@@ -399,9 +399,9 @@
         <!-- <div class="navbar-container"> -->
         <ul id="navbar-list">
           <li id="user-details" class="navbar-link"></li>
-          <li id="update-details" class="navbar-link button-style">
+          <!-- <li id="update-details" class="navbar-link button-style">
             Edit/View Profile
-          </li>
+          </li> -->
           <li>
             <a href="LoginNew.html" class="navbar-link button-style">Log Out</a>
           </li>
@@ -410,6 +410,29 @@
         <!-- </div> -->
       </nav>
     </section>
+    <button
+      id="update-details"
+      class="Edit_btn_color"
+      style="
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.6s;
+        position: fixed;
+        right: 25px;
+        bottom: 70%;
+        background: rgb(89, 71, 226);
+        color: white;
+        z-index: 10;
+        padding: 0.7rem;
+        width: 80px;
+        border-radius: 10rem;
+        transform: unset;
+      "
+    >
+      Edit Details
+    </button>
+    <!-- UpdateForm -->
     <h1 id="my-wish-list">My Games</h1>
     <div id="filter-controls" class="filter-controls">
       <input id="price-input" type="number" placeholder="Enter minimum price" />

@@ -18,6 +18,7 @@
     <script src="../JS/ajaxcalls.js"></script>
     <script src="../JS/game.js"></script>
     <script src="../JS/navBar.js"></script>
+    <!-- <link href="./MyGames.html"></link> -->
     <link rel="stylesheet" href="../CSS/StyleSheet.css" />
     <script>
       $(document).ready(function () {
@@ -31,9 +32,113 @@
           window.location.href = "./LoginNew.html";
           return;
         }
+        // $("#update-form").hide();
         getUserOnNavBar(userData);
-        console.log(userData.name);
+        //console.log(userData.name);
       });
+      // //NEW
+      // $("#update-details").click(function () {
+      //   $("#update-form").show();
+      //   $("#filter-controls").hide();
+      //   $("#my-wish-list").hide();
+      //   $("#game-container").hide();
+      //   document.getElementById("updated-name").value = userData.name || "";
+      //   document.getElementById("updated-email").value = userData.email || "";
+      //   document.getElementById("updated-password").value =
+      //     userData.password || "";
+      // });
+
+      // $("#cancel-update").click(function () {
+      //   Swal.fire({
+      //     title: "Are you sure?",
+      //     text: "Any unsaved changes will be lost.",
+      //     icon: "warning",
+      //     showCancelButton: true,
+      //     confirmButtonText: "Yes, cancel",
+      //     cancelButtonText: "No, stay here",
+      //   }).then((result) => {
+      //     if (result.isConfirmed) {
+      //       // Hide the form and reset fields
+      //       $("#update-form").hide();
+      //       $("#filter-controls").show();
+      //       $("#my-wish-list").show();
+      //       $("#game-container").show();
+      //     }
+      //   });
+      // });
+      // $("#update-form").submit(function (e) {
+      //   e.preventDefault();
+
+      //   var email = $("#updated-email").val();
+      //   var pass = $("#updated-password").val();
+      //   //var id = $("#register-id").val();
+
+      //   var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      //   var passwordRegex = /^[A-Z0-9]+$/;
+      //   //var idRegex = /^\d{9}$/;
+
+      //   if (!emailRegex.test(email)) {
+      //     Swal.fire({
+      //       icon: "error",
+      //       title: "Invalid email",
+      //     });
+      //   } else if (!passwordRegex.test(pass)) {
+      //     Swal.fire({
+      //       icon: "error",
+      //       title: "Invalid password",
+      //     });
+      //   } else {
+      //     // Swal.fire({
+      //     //   icon: "success",
+      //     //   title: "Form submitted successfully",
+      //     // });
+      //     const newUser = {
+      //       Name: $("#updated-name").val(),
+      //       Email: $("#updated-email").val(),
+      //       Password: $("#updated-password").val(),
+      //     };
+      //     ajaxCall(
+      //       "PUT",
+      //       `${serverU}/${userData.id}`,
+      //       JSON.stringify(newUser),
+      //       updateSCBF,
+      //       updateECBF
+      //     );
+
+      //     return status;
+      //   }
+      // });
+
+      // function updateSCBF(status) {
+      //   if (status == -1) {
+      //     alert("Email already exists , try again");
+      //     // const updateForm = document.getElementById("update-form");
+      //     // RegisterForm.reset();
+      //     document.getElementById("updated-name").value = userData.name || "";
+      //     document.getElementById("updated-email").value = userData.email || "";
+      //     document.getElementById("updated-password").value =
+      //       userData.password || "";
+      //   } else {
+      //     //alert("Updated successful! Please log in.");
+      //     Swal.fire({
+      //       icon: "success",
+      //       title: "Your details were updated!",
+      //       confirmButtonText: "OK",
+      //     }).then((result) => {
+      //       if (result.isConfirmed) {
+      //         $("#update-form").hide();
+      //         $("#filter-controls").show();
+      //         $("#my-wish-list").show();
+      //         $("#game-container").show();
+      //       }
+      //     });
+      //   }
+      // }
+
+      // function updateECBF(err) {
+      //   console.log(err);
+      // }
+      //END
 
       // function getUserOnNavBar(userData) {
       //   userDetailsPlaceHolder = document.getElementById("user-details");
@@ -288,15 +393,60 @@
         <!-- <div class="navbar-container"> -->
         <ul id="navbar-list">
           <li id="user-details" class="navbar-link"></li>
+          <li><a href="MyGames.html" class="navbar-link">User List</a></li>
           <li>
             <a href="LoginNew.html" class="navbar-link button-style">Log Out</a>
           </li>
-          <li><a href="MyGames.html" class="navbar-link">User List</a></li>
         </ul>
         <!-- </div> -->
       </nav>
     </section>
+    <button
+      id="#update-details"
+      class="Edit_btn_color"
+      style="
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.6s;
+        position: fixed;
+        right: 25px;
+        bottom: 70%;
+        background: rgb(89, 71, 226);
+        color: white;
+        z-index: 10;
+        padding: 0.7rem;
+        width: 80px;
+        border-radius: 10rem;
+        transform: unset;
+      "
+    >
+      Edit Details
+    </button>
+    <!-- UpdateForm -->
+    <!-- <form id="update-form" action="">
+      <h2>My Details</h2>
+      <label for="register-name">Name:</label>
+      <input type="text" id="updated-name" name="Name" required />
 
+      <label for="register-email">Email:</label>
+      <input type="email" id="updated-email" name="Email" required />
+
+      <label for="register-password">Password:</label>
+      <div class="password-container">
+        <input type="password" id="updated-password" name="Password" required />
+        <button type="button" id="toggle-password" class="toggle-password-btn">
+          👁️ Show
+        </button>
+      </div>
+      <div class="form-buttons">
+        <button type="button" id="cancel-update" class="cancel-btn">
+          Cancel
+        </button>
+        <input type="submit" value="Update" />
+      </div>
+    </form> -->
+    <!-- end -->
     <h1>Games List</h1>
     <div id="games-container">
       <div id="game-cards" class="game-container"></div>
