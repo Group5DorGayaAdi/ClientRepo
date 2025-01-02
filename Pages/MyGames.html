@@ -127,6 +127,30 @@
             return status;
           }
         });
+
+        document
+          .getElementById("filter-price-btn")
+          .addEventListener("click", () => {
+            const price = document.getElementById("price-input").value;
+            if (price) {
+              fetchFilteredGamesByPrice(price);
+            } else {
+              const zero = 0;
+              fetchFilteredGamesByPrice(zero);
+            }
+          });
+
+        document
+          .getElementById("filter-rank-btn")
+          .addEventListener("click", () => {
+            const rank = document.getElementById("rank-input").value;
+            if (rank) {
+              fetchFilteredGamesByRank(rank);
+            } else {
+              const zero = 0;
+              fetchFilteredGamesByRank(zero);
+            }
+          });
       });
 
       function updateSCBF(status) {
@@ -158,30 +182,6 @@
       function updateECBF(err) {
         console.log(err);
       }
-
-      document
-        .getElementById("filter-price-btn")
-        .addEventListener("click", () => {
-          const price = document.getElementById("price-input").value;
-          if (price) {
-            fetchFilteredGamesByPrice(price);
-          } else {
-            const zero = 0;
-            fetchFilteredGamesByPrice(zero);
-          }
-        });
-
-      document
-        .getElementById("filter-rank-btn")
-        .addEventListener("click", () => {
-          const rank = document.getElementById("rank-input").value;
-          if (rank) {
-            fetchFilteredGamesByRank(rank);
-          } else {
-            const zero = 0;
-            fetchFilteredGamesByRank(zero);
-          }
-        });
 
       function fetchFilteredGamesByPrice(price) {
         ajaxCall(
