@@ -15,19 +15,31 @@
       crossorigin="anonymous"
     ></script>
     <script src="../JS/ajaxcalls.js"></script>
+    <script src="../JS/navBar.js"></script>
     <link rel="stylesheet" href="../CSS/StyleSheet.css" />
     <script>
       const serverUrl = "https://localhost:7048/api/Games";
       let gamesArray = [];
 
       $(document).ready(function () {
-        fetchGames();
+        fetchGames(userData.id);
+        if (!userData) {
+          console.error("No user data found in local storage!");
+          window.location.href = "./LoginNew.html";
+          return;
+        }
+
+        getUserOnNavBar(userData);
+
         document
           .getElementById("filter-price-btn")
           .addEventListener("click", () => {
             const price = document.getElementById("price-input").value;
             if (price) {
               fetchFilteredGamesByPrice(price);
+            } else {
+              const zero = 0;
+              fetchFilteredGamesByPrice(zero);
             }
           });
 
@@ -37,28 +49,17 @@
             const rank = document.getElementById("rank-input").value;
             if (rank) {
               fetchFilteredGamesByRank(rank);
+            } else {
+              const zero = 0;
+              fetchFilteredGamesByRank(zero);
             }
           });
       });
 
-      //$("#price-input").addEventListener("input", function (e) {
-      //    e.preventDefault();
-
-      //})
-      //document.getElementById("price-input").addEventListener("input",()=> {
-      //    const price = document.getElementById("rank-input").value;
-      //    if (price === "") {
-      //        price = 0;
-      //        fetchFilteredGamesByRank(price);
-      //    }
-      //    else {
-      //        fetchFilteredGamesByRank(price);
-      //    }
-      //});
       function fetchFilteredGamesByPrice(price) {
         ajaxCall(
           "GET",
-          `${serverUrl}/searchByPrice?price=${price}`,
+          `${serverUrl}/searchByPrice?price=${price}&id=${userData.id}`,
           "",
           getSCBF,
           getECBF
@@ -68,15 +69,21 @@
       function fetchFilteredGamesByRank(rank) {
         ajaxCall(
           "GET",
-          `${serverUrl}/searchByRankScore/scoreRank/${rank}`,
+          `${serverUrl}/searchByRankScore/scoreRank/${rank}/id/${userData.id}`,
           "",
           getSCBF,
           getECBF
         );
       }
 
-      function fetchGames() {
-        ajaxCall("GET", serverUrl, "", getSCBF, getECBF);
+      function fetchGames(id) {
+        ajaxCall(
+          "GET",
+          `${serverUrl}/getUsersWishList/id/${id}`,
+          "",
+          getSCBF,
+          getECBF
+        );
       }
 
       function getSCBF(status) {
@@ -99,10 +106,7 @@
         }
 
         games.forEach((game) => {
-          const gameCard = document.createElement("div");
-          gameCard.className = "game-card";
-
-          gameCard.innerHTML = `
+          const template = `
                      <div class="card">
              <img class="card-img-top" src="${game.headerImage}" alt="${
             game.name
@@ -130,39 +134,33 @@
                      </div>
                 `;
 
-          const deleteButton = gameCard.querySelector(".delete-btn");
+          const wrapper = document.createElement("div");
+          wrapper.className = "game-card";
+          wrapper.innerHTML = template;
+
+          const deleteButton = wrapper.querySelector(".delete-btn");
           deleteButton.addEventListener("click", () => deleteGame(game.appID));
 
-          container.appendChild(gameCard);
+          container.appendChild(wrapper);
         });
       }
 
-      function deleteGame(id) {
-        console.log(`Attempting to delete game with ID: ${id}`);
+      function deleteGame(appID) {
+        console.log(`Attempting to delete game with ID: ${appID}`);
 
         ajaxCall(
           "DELETE",
-          `${serverUrl}/DeleteByID?id=${id}`,
+          `${serverUrl}/DeleteByID/id/${userData.id}/appID/${appID}`,
           "",
           () => {
-            console.log(`Game with ID: ${id} successfully deleted.`);
-            gamesArray = gamesArray.filter((game) => game.appID !== id);
-            renderGames(gamesArray);
+            console.log(`Game with ID: ${appID} successfully deleted.`);
+            fetchGames(userData.id);
           },
           (error) => {
-            console.error(`Failed to delete game with ID: ${id}`, error);
+            console.error(`Failed to delete game with ID: ${appID}`, error);
             alert("Failed to delete the game. Please try again.");
           }
         );
-      }
-
-      function deleteSCBF(status) {
-        gamesArray = gamesArray.filter((game) => game.appID !== id);
-        renderGames(gamesArray);
-      }
-
-      function deleteECBF(error) {
-        console.log(error);
       }
     </script>
     <style>
@@ -260,12 +258,19 @@
     </style>
   </head>
   <body>
-    <nav class="navbar">
-      <div class="navbar-container">
-        <a href="LoginNew.html" class="navbar-link button-style">Log Out</a>
-        <a href="index.html" class="navbar-link">All Games</a>
-      </div>
-    </nav>
+    <section class="top-page">
+      <nav class="navbar">
+        <!-- <div class="navbar-container"> -->
+        <ul id="navbar-list">
+          <li id="user-details" class="navbar-link"></li>
+          <li>
+            <a href="LoginNew.html" class="navbar-link button-style">Log Out</a>
+          </li>
+          <li><a href="index.html" class="navbar-link">All Games</a></li>
+        </ul>
+        <!-- </div> -->
+      </nav>
+    </section>
     <h1>My Games</h1>
     <div class="filter-controls">
       <input id="price-input" type="number" placeholder="Enter minimum price" />

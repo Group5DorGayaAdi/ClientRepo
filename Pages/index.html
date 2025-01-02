@@ -17,13 +17,14 @@
 
     <script src="../JS/ajaxcalls.js"></script>
     <script src="../JS/game.js"></script>
+    <script src="../JS/navBar.js"></script>
     <link rel="stylesheet" href="../CSS/StyleSheet.css" />
     <script>
       $(document).ready(function () {
         let port = 7048;
         server = `https://localhost:${port}/`;
         api = server + "api/Games";
-        userData = JSON.parse(localStorage.getItem("user"));
+        // userData = JSON.parse(localStorage.getItem("user"));
         renderAvailableGames(userData.id);
         if (!userData) {
           console.error("No user data found in local storage!");
@@ -34,20 +35,20 @@
         console.log(userData.name);
       });
 
-      function getUserOnNavBar(userData) {
-        userDetailsPlaceHolder = document.getElementById("user-details");
-        if (!userDetailsPlaceHolder) {
-          console.error("Navbar placeHolder NOT FOUND");
-          return;
-        }
-        const detTemplate = ` 
-        <div class="currentUser" "> 
-          <div class="card-details"> 
-            <p id="card-current-name" class="card-text">Welcome ,  ${userData.name}</p>
-          </div> 
-        </div> `;
-        userDetailsPlaceHolder.innerHTML = detTemplate;
-      }
+      // function getUserOnNavBar(userData) {
+      //   userDetailsPlaceHolder = document.getElementById("user-details");
+      //   if (!userDetailsPlaceHolder) {
+      //     console.error("Navbar placeHolder NOT FOUND");
+      //     return;
+      //   }
+      //   const detTemplate = `
+      //   <div class="currentUser" ">
+      //     <div class="card-details">
+      //       <p id="card-current-name" class="card-text">Welcome ,  ${userData.name}</p>
+      //     </div>
+      //   </div> `;
+      //   userDetailsPlaceHolder.innerHTML = detTemplate;
+      // }
 
       const getGameHTMLCard = (game) => {
         const platforms = [];
@@ -286,11 +287,11 @@
       <nav class="navbar">
         <!-- <div class="navbar-container"> -->
         <ul id="navbar-list">
+          <li id="user-details" class="navbar-link"></li>
           <li>
             <a href="LoginNew.html" class="navbar-link button-style">Log Out</a>
           </li>
           <li><a href="MyGames.html" class="navbar-link">User List</a></li>
-          <li id="user-details" class="navbar-link"></li>
         </ul>
         <!-- </div> -->
       </nav>
