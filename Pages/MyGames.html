@@ -1,248 +1,279 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
-<head>
+  <head>
     <meta charset="utf-8" />
     <title>My Games</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Silkscreen:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
     <script src="../JS/ajaxcalls.js"></script>
-    <link rel="stylesheet" href="../CSS/StyleSheet.css">
+    <link rel="stylesheet" href="../CSS/StyleSheet.css" />
     <script>
-        const serverUrl = "https://localhost:7112/api/Games";
-        let gamesArray = [];
+      const serverUrl = "https://localhost:7048/api/Games";
+      let gamesArray = [];
 
-        $(document).ready(function () {
-            fetchGames();
-            document.getElementById("filter-price-btn").addEventListener("click", () => {
-                const price = document.getElementById("price-input").value;
-                if (price) {
-                    fetchFilteredGamesByPrice(price);
-                }
-        })
-
-            document.getElementById("filter-rank-btn").addEventListener("click", () => {
-                const rank = document.getElementById("rank-input").value;
-                if (rank) {
-                    fetchFilteredGamesByRank(rank);
-                }
-            });
-        });
-
-        //$("#price-input").addEventListener("input", function (e) {
-        //    e.preventDefault();
-
-        //})
-        //document.getElementById("price-input").addEventListener("input",()=> {
-        //    const price = document.getElementById("rank-input").value;
-        //    if (price === "") {
-        //        price = 0;
-        //        fetchFilteredGamesByRank(price);
-        //    }
-        //    else {
-        //        fetchFilteredGamesByRank(price);
-        //    }
-        //});
-        function fetchFilteredGamesByPrice(price) {
-            ajaxCall("GET", `${serverUrl}/searchByPrice?price=${price}`, "", getSCBF, getECBF);
-        }
-
-        function fetchFilteredGamesByRank(rank) {
-            ajaxCall("GET", `${serverUrl}/searchByRankScore/scoreRank/${rank}`, "", getSCBF, getECBF);
-
-        }
-
-        function fetchGames() {
-            ajaxCall("GET", serverUrl, "", getSCBF, getECBF);
-        }
-
-        function getSCBF(status) {
-            gamesArray = status;
-            console.log("Games array updated:", gamesArray);
-            renderGames(gamesArray);
-        }
-
-        function getECBF(error) {
-            console.log(error);
-        }
-
-        function renderGames(games) {
-
-            const container = document.getElementById("game-container");
-            container.innerHTML = ""; 
-
-            if (!games || games.length === 0) {
-                container.innerHTML = "<p>No games available.</p>";
-                return;
+      $(document).ready(function () {
+        fetchGames();
+        document
+          .getElementById("filter-price-btn")
+          .addEventListener("click", () => {
+            const price = document.getElementById("price-input").value;
+            if (price) {
+              fetchFilteredGamesByPrice(price);
             }
+          });
 
-            games.forEach((game) => {
-                const gameCard = document.createElement("div");
-                gameCard.className = "game-card";
+        document
+          .getElementById("filter-rank-btn")
+          .addEventListener("click", () => {
+            const rank = document.getElementById("rank-input").value;
+            if (rank) {
+              fetchFilteredGamesByRank(rank);
+            }
+          });
+      });
 
+      //$("#price-input").addEventListener("input", function (e) {
+      //    e.preventDefault();
 
+      //})
+      //document.getElementById("price-input").addEventListener("input",()=> {
+      //    const price = document.getElementById("rank-input").value;
+      //    if (price === "") {
+      //        price = 0;
+      //        fetchFilteredGamesByRank(price);
+      //    }
+      //    else {
+      //        fetchFilteredGamesByRank(price);
+      //    }
+      //});
+      function fetchFilteredGamesByPrice(price) {
+        ajaxCall(
+          "GET",
+          `${serverUrl}/searchByPrice?price=${price}`,
+          "",
+          getSCBF,
+          getECBF
+        );
+      }
 
-                gameCard.innerHTML = `
+      function fetchFilteredGamesByRank(rank) {
+        ajaxCall(
+          "GET",
+          `${serverUrl}/searchByRankScore/scoreRank/${rank}`,
+          "",
+          getSCBF,
+          getECBF
+        );
+      }
+
+      function fetchGames() {
+        ajaxCall("GET", serverUrl, "", getSCBF, getECBF);
+      }
+
+      function getSCBF(status) {
+        gamesArray = status;
+        console.log("Games array updated:", gamesArray);
+        renderGames(gamesArray);
+      }
+
+      function getECBF(error) {
+        console.log(error);
+      }
+
+      function renderGames(games) {
+        const container = document.getElementById("game-container");
+        container.innerHTML = "";
+
+        if (!games || games.length === 0) {
+          container.innerHTML = "<p>No games available.</p>";
+          return;
+        }
+
+        games.forEach((game) => {
+          const gameCard = document.createElement("div");
+          gameCard.className = "game-card";
+
+          gameCard.innerHTML = `
                      <div class="card">
-             <img class="card-img-top" src="${game.headerImage}" alt="${game.name}" />
+             <img class="card-img-top" src="${game.headerImage}" alt="${
+            game.name
+          }" />
              <div class="card-body">
                  <h5 class="card-title">${game.name}</h5>
-                 <p><strong>Release Date:</strong> ${new Date(game.releaseDate).toDateString()}</p>
-                 <p><strong>Price:</strong> ${game.price === 0 ? "Free to Play" : `$${game.price.toFixed(2)}`}</p>
+                 <p><strong>Release Date:</strong> ${new Date(
+                   game.releaseDate
+                 ).toDateString()}</p>
+                 <p><strong>Price:</strong> ${
+                   game.price === 0
+                     ? "Free to Play"
+                     : `$${game.price.toFixed(2)}`
+                 }</p>
                  <p><strong>Rank Score:</strong> ${game.scoreRank}</p>
-                 <p><strong>Publisher:</strong> ${game.publisher || "Unknown"}</p>
+                 <p><strong>Publisher:</strong> ${
+                   game.publisher || "Unknown"
+                 }</p>
              </div>
                     <div class="card-footer">
-                    <button class="delete-btn" data-id="${game.appID}">Delete</button>
+                    <button class="delete-btn" data-id="${
+                      game.appID
+                    }">Delete</button>
                     </div>
                      </div>
                 `;
 
-                const deleteButton = gameCard.querySelector(".delete-btn");
-                deleteButton.addEventListener("click", () => deleteGame(game.appID));
+          const deleteButton = gameCard.querySelector(".delete-btn");
+          deleteButton.addEventListener("click", () => deleteGame(game.appID));
 
-                container.appendChild(gameCard);
-            });
-        }
+          container.appendChild(gameCard);
+        });
+      }
 
-        function deleteGame(id) {
-            console.log(`Attempting to delete game with ID: ${id}`);
+      function deleteGame(id) {
+        console.log(`Attempting to delete game with ID: ${id}`);
 
-            ajaxCall("DELETE", `${serverUrl}/DeleteByID?id=${id}`, "", () => {
-                console.log(`Game with ID: ${id} successfully deleted.`);
-                gamesArray = gamesArray.filter((game) => game.appID !== id);
-                renderGames(gamesArray); 
-            }, (error) => {
-                console.error(`Failed to delete game with ID: ${id}`, error);
-                alert("Failed to delete the game. Please try again.");
-            });
-        }
-
-
-        function deleteSCBF(status) {
+        ajaxCall(
+          "DELETE",
+          `${serverUrl}/DeleteByID?id=${id}`,
+          "",
+          () => {
+            console.log(`Game with ID: ${id} successfully deleted.`);
             gamesArray = gamesArray.filter((game) => game.appID !== id);
             renderGames(gamesArray);
-        }
+          },
+          (error) => {
+            console.error(`Failed to delete game with ID: ${id}`, error);
+            alert("Failed to delete the game. Please try again.");
+          }
+        );
+      }
 
-        function deleteECBF(error) {
-            console.log(error);
+      function deleteSCBF(status) {
+        gamesArray = gamesArray.filter((game) => game.appID !== id);
+        renderGames(gamesArray);
+      }
 
-        }
-
+      function deleteECBF(error) {
+        console.log(error);
+      }
     </script>
     <style>
-        body {
-            
-            background-color: #0c1622;
-            color: #fff;
-            padding: 20px;
-        }
+      body {
+        background-color: #0c1622;
+        color: #fff;
+        padding: 20px;
+      }
 
-        h1 {
-            text-align: center;
-            font-family: Silkscreen;
-        }
+      h1 {
+        text-align: center;
+        font-family: Silkscreen;
+      }
 
-        .game-container {
-            font-family: Nunito;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-        }
+      .game-container {
+        font-family: Nunito;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+      }
 
-        .game-card {
-            width: 300px;
-            background-color: #1e293b;
-            border-radius: 10px;
-            padding: 15px;
-            text-align: left;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
+      .game-card {
+        width: 300px;
+        background-color: #1e293b;
+        border-radius: 10px;
+        padding: 15px;
+        text-align: left;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
 
-            .game-card button {
-                margin-top: 10px;
-                background-color: #e53935;
-                color: #fff;
-                border: none;
-                padding: 10px 15px;
-                border-radius: 5px;
-                cursor: pointer;
-            }
+      .game-card button {
+        margin-top: 10px;
+        background-color: #e53935;
+        color: #fff;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
 
-                .game-card button:hover {
-                    background-color: #d32f2f;
-                }
+      .game-card button:hover {
+        background-color: #d32f2f;
+      }
 
-        .filter-controls {
-            font-family: Nunito;
-            display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
-            justify-content: center;
-        }
+      .filter-controls {
+        font-family: Nunito;
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+        justify-content: center;
+      }
 
-            .filter-controls input {
-                font-family: Nunito;
-                padding: 10px;
-                border-radius: 5px;
-                border: none;
-                outline: none;
-                font-size: 1rem;
-            }
+      .filter-controls input {
+        font-family: Nunito;
+        padding: 10px;
+        border-radius: 5px;
+        border: none;
+        outline: none;
+        font-size: 1rem;
+      }
 
-            .filter-controls button {
-                font-family: Nunito;
-                background-color: #4caf50;
-                color: white;
-                border: none;
-                padding: 10px 20px;
-                border-radius: 5px;
-                cursor: pointer;
-                font-size: 1rem;
-            }
+      .filter-controls button {
+        font-family: Nunito;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1rem;
+      }
 
-                .filter-controls button:hover {
-                    background-color: #388e3c;
-                }
+      .filter-controls button:hover {
+        background-color: #388e3c;
+      }
 
-        .button-style {
-            display: inline-block;
-            padding: 10px 20px;
-            color: white;
-            text-decoration: none;
-            background-color: #ff001d;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer; 
-            text-align: center;
-        }
+      .button-style {
+        display: inline-block;
+        padding: 10px 20px;
+        color: white;
+        text-decoration: none;
+        background-color: #ff001d;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        text-align: center;
+      }
 
-            .button-style:hover {
-                background-color: #0056b3;
-                text-decoration: none;
-            }
+      .button-style:hover {
+        background-color: #0056b3;
+        text-decoration: none;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <nav class="navbar">
-        <div class="navbar-container">
-            <a href="LoginNew.html" class="navbar-link button-style">Log Out</a>
-            <a href="index.html" class="navbar-link">All Games</a>
-        </div>
+      <div class="navbar-container">
+        <a href="LoginNew.html" class="navbar-link button-style">Log Out</a>
+        <a href="index.html" class="navbar-link">All Games</a>
+      </div>
     </nav>
     <h1>My Games</h1>
     <div class="filter-controls">
-        <input id="price-input" type="number" placeholder="Enter minimum price">
-        <button id="filter-price-btn">Filter by Price</button>
+      <input id="price-input" type="number" placeholder="Enter minimum price" />
+      <button id="filter-price-btn">Filter by Price</button>
 
-        <input id="rank-input" type="number" placeholder="Enter minimum rank">
-        <button id="filter-rank-btn">Filter by Rank</button>
+      <input id="rank-input" type="number" placeholder="Enter minimum rank" />
+      <button id="filter-rank-btn">Filter by Rank</button>
     </div>
     <div class="game-container" id="game-container"></div>
-</body>
+  </body>
 </html>
