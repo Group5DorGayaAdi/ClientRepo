@@ -23,7 +23,7 @@
         let port = 7048;
         server = `https://localhost:${port}/`;
         api = server + "api/Games";
-        const userData = JSON.parse(localStorage.getItem("user"));
+        userData = JSON.parse(localStorage.getItem("user"));
         console.log(userData.name);
         renderAvailableGames(userData.id);
       });
@@ -78,42 +78,23 @@
         const addToListButton = wrapper.querySelector(
           `#addToListBTN-${game.appID}`
         );
-        addToListButton.addEventListener("click", () => addToFavorites(game));
+        addToListButton.addEventListener("click", () =>
+          addToFavorites(game.appID, userData.id)
+        );
 
         return wrapper;
       };
 
-      function addToFavorites(game) {
-        const newGameToList = gamesList.find((g) => g.AppID == game.AppID);
-        if (newGameToList) {
-          let gameDet = {
-            AppID: newGameToList.AppID,
-            Name: newGameToList.Name,
-            ReleaseDate: new Date(newGameToList.Release_date).toISOString(),
-            Price: newGameToList.Price,
-            Description: newGameToList.description,
-            HeaderImage: newGameToList.Header_image,
-            Website: newGameToList.Website,
-            Windows: newGameToList.Windows.toUpperCase() === "TRUE",
-            Linux: newGameToList.Linux.toUpperCase() === "TRUE",
-            ScoreRank: newGameToList.Score_rank,
-            Recommendations: newGameToList.Recommendations,
-            Publisher: newGameToList.Developers,
-          };
-
-          ajaxCall(
-            "POST",
-            api,
-            JSON.stringify(gameDet),
-            () => {
-              gamesList = gamesList.filter((g) => g.AppID !== game.AppID);
-              renderAvailableGames();
-            },
-            postECBF
-          );
-        } else {
-          console.error(`Game with AppID ${game.AppID} not found`);
-        }
+      function addToFavorites(gameid, id) {
+        ajaxCall(
+          "POST",
+          `${api}/addToFavorites/id/${id}/appID/${gameid}`,
+          "",
+          () => {
+            renderAvailableGames(id);
+          },
+          postECBF
+        );
       }
 
       function postSCBF(status) {
@@ -138,7 +119,7 @@
         return templateWrapper;
       };
 
-      let gamesList = [...GAME];
+      //let gamesList = [...GAME];
 
       const renderAvailableGames = (id) => {
         ajaxCall(
