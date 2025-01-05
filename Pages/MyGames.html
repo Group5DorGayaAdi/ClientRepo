@@ -19,14 +19,11 @@
     <script src="../JS/navBar.js"></script>
     <link rel="stylesheet" href="../CSS/StyleSheet.css" />
     <script>
-      const serverUrl = "https://localhost:7048/api/Games";
-      const serverU = "https://localhost:7048/api/Users";
-      //let gamesArray = [];
+      const serverUrl =
+        "https://proj.ruppin.ac.il/igroup5/test2/tar1/api/Games";
+      const serverU = "https://proj.ruppin.ac.il/igroup5/test2/tar1/api/Users";
 
       $(document).ready(function () {
-        // let port = 7048;
-        // server = `https://localhost:${port}/`;
-        // api = server + "api/Users";
         $("#update-form").hide();
         fetchGames(userData.id);
 
@@ -57,6 +54,7 @@
         getUserOnNavBar(userData);
 
         $("#update-details").click(function () {
+          // window.location.reload();
           $("#update-form").show();
           $("#filter-controls").hide();
           $("#my-wish-list").hide();
@@ -70,7 +68,6 @@
         $("#cancel-update").click(function () {
           Swal.fire({
             title: "Are you sure?",
-            //text: "Any unsaved changes will be lost.",
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Yes, cancel",
@@ -90,11 +87,9 @@
 
           var email = $("#updated-email").val();
           var pass = $("#updated-password").val();
-          //var id = $("#register-id").val();
 
           var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
           var passwordRegex = /^[A-Z0-9]+$/;
-          //var idRegex = /^\d{9}$/;
 
           if (!emailRegex.test(email)) {
             Swal.fire({
@@ -107,15 +102,12 @@
               title: "Invalid password",
             });
           } else {
-            // Swal.fire({
-            //   icon: "success",
-            //   title: "Form submitted successfully",
-            // });
             const newUser = {
               Name: $("#updated-name").val(),
               Email: $("#updated-email").val(),
               Password: $("#updated-password").val(),
             };
+
             ajaxCall(
               "PUT",
               `${serverU}/${userData.id}`,
@@ -154,26 +146,26 @@
       });
 
       function updateSCBF(status) {
-        if (status == -1) {
+        if (status == null) {
           alert("Email already exists , try again");
-          // const updateForm = document.getElementById("update-form");
-          // RegisterForm.reset();
           document.getElementById("updated-name").value = userData.name || "";
           document.getElementById("updated-email").value = userData.email || "";
           document.getElementById("updated-password").value =
             userData.password || "";
         } else {
-          //alert("Updated successful! Please log in.");
           Swal.fire({
             icon: "success",
             title: "Your details were updated!",
             confirmButtonText: "OK",
           }).then((result) => {
             if (result.isConfirmed) {
+              localStorage.setItem("user", JSON.stringify(status));
+              // window.location.reload();
               $("#update-form").hide();
               $("#filter-controls").show();
               $("#my-wish-list").show();
               $("#game-container").show();
+              window.location.reload();
             }
           });
         }
@@ -438,7 +430,7 @@
       Edit Details
     </button>
     <!-- UpdateForm -->
-    <h1 id="my-wish-list">My Games</h1>
+    <h1 id="my-wish-list">My Wish List</h1>
     <div id="filter-controls" class="filter-controls">
       <input id="price-input" type="number" placeholder="Enter minimum price" />
       <button id="filter-price-btn">Filter by Price</button>

@@ -9,7 +9,7 @@ function getUserOnNavBar(userData) {
   const detTemplate = ` 
             <div class="currentUser" "> 
               <div class="card-details"> 
-                <p id="card-current-name" class="card-text">Welcome ,  ${userData.name}</p>
+                <p id="card-current-name" class="card-text">Welcome ,  ${userData.name}!</p>
               </div> 
             </div> `;
   userDetailsPlaceHolder.innerHTML = detTemplate;

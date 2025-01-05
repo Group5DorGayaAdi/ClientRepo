@@ -21,9 +21,11 @@
     <link href="../CSS/LoginStyleSheet.css" rel="stylesheet" />
     <script>
       $(document).ready(function () {
-        let port = 7048;
-        server = `https://localhost:${port}/`;
-        api = server + "api/Users";
+        // let port = 7048;
+        // server = `https://localhost:${port}/`;
+        // api = server + "api/Users";
+
+        api = "https://proj.ruppin.ac.il/igroup5/test2/tar1/api/Users";
 
         $("#register-form").hide();
 
@@ -36,7 +38,6 @@
         $("#cancel-register").click(function () {
           Swal.fire({
             title: "Are you sure?",
-            //text: "Any unsaved changes will be lost.",
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Yes, cancel",
@@ -76,10 +77,6 @@
             const loginForm = document.getElementById("login-form");
             loginForm.reset();
           } else {
-            // swal.fire({
-            //   icon: "success",
-            //   title: "Form submitted successfully",
-            // });
             newUser = {
               Id: 0,
               Name: "",
@@ -128,11 +125,9 @@
 
           var email = $("#register-email").val();
           var pass = $("#register-password").val();
-          //var id = $("#register-id").val();
 
           var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
           var passwordRegex = /^[A-Z0-9]+$/;
-          //var idRegex = /^\d{9}$/;
 
           if (!emailRegex.test(email)) {
             swal.fire({
@@ -144,22 +139,11 @@
               icon: "error",
               title: "Invalid password",
             });
-            //   } else if (!idRegex.test(id)) {
-            //     swal.fire({
-            //       icon: "error",
-            //       title: "Invalid id number",
-            //     });
           } else {
-            // swal.fire({
-            //   icon: "success",
-            //   title: "Form submitted successfully",
-            // });
-            // alert("submited");
             const newUser = {
               Name: $("#register-name").val(),
               Email: $("#register-email").val(),
               Password: $("#register-password").val(),
-              // Id: $("#register-id").val(),
             };
             ajaxCall(
               "POST",
@@ -168,7 +152,6 @@
               registerSCBF,
               registerECBF
             );
-
             return status;
           }
         });
@@ -179,7 +162,6 @@
             const RegisterForm = document.getElementById("register-form");
             RegisterForm.reset();
           } else {
-            // alert("Registration successful! Please log in.");
             Swal.fire({
               icon: "success",
               title: "Registration successful!",
@@ -245,9 +227,6 @@
             required
           />
 
-          <!-- <label for="register-id">* Id:</label>
-          <input type="text" id="register-id" name="id" required /> -->
-
           <label for="register-email">* Email:</label>
           <input
             type="email"
@@ -266,7 +245,6 @@
             required
           />
 
-          <!-- <input type="submit" value="Register" /> -->
           <div class="form-buttons">
             <button type="button" id="cancel-register" class="cancel-btn">
               Cancel

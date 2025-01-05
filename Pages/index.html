@@ -14,29 +14,28 @@
       integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
       crossorigin="anonymous"
     ></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../JS/ajaxcalls.js"></script>
-    <script src="../JS/game.js"></script>
     <script src="../JS/navBar.js"></script>
     <link rel="stylesheet" href="../CSS/StyleSheet.css" />
     <script>
+      const serverU = "https://proj.ruppin.ac.il/igroup5/test2/tar1/api/Users";
+
       $(document).ready(function () {
-        let port = 7048;
-        server = `https://localhost:${port}/`;
-        api = server + "api/Games";
-        // userData = JSON.parse(localStorage.getItem("user"));
+        // let port = 7048;
+        // server = `https://localhost:${port}/`;
+        api = "https://proj.ruppin.ac.il/igroup5/test2/tar1/api/Games";
+
         renderAvailableGames(userData.id);
         if (!userData) {
           console.error("No user data found in local storage!");
           window.location.href = "./LoginNew.html";
           return;
         }
-        // $("#update-form").hide();
         getUserOnNavBar(userData);
 
         //UpdateForm
         $("#update-form").hide();
-        //fetchGames(userData.id);
 
         const togglePassword = document.getElementById("toggle-password");
         const passwordInput = document.getElementById("updated-password");
@@ -66,9 +65,9 @@
 
         $("#update-details").click(function () {
           $("#update-form").show();
-          $("#filter-controls").hide();
-          $("#my-wish-list").hide();
-          $("#game-container").hide();
+          //$("#filter-controls").hide();
+          $("#games-header").hide();
+          $("#games-container").hide();
           document.getElementById("updated-name").value = userData.name || "";
           document.getElementById("updated-email").value = userData.email || "";
           document.getElementById("updated-password").value =
@@ -76,33 +75,32 @@
         });
 
         $("#cancel-update").click(function () {
-          Swal.fire({
-            title: "Are you sure?",
-            // text: "Any unsaved changes will be lost.",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes, cancel",
-            cancelButtonText: "No, stay here",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              // Hide the form and reset fields
-              $("#update-form").hide();
-              $("#filter-controls").show();
-              $("#my-wish-list").show();
-              $("#game-container").show();
-            }
-          });
+          swal
+            .fire({
+              title: "Are you sure?",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonText: "Yes, cancel",
+              cancelButtonText: "No, stay here",
+            })
+            .then((result) => {
+              if (result.isConfirmed) {
+                // Hide the form and reset fields
+                $("#update-form").hide();
+                $("#games-header").show();
+                $("#games-container").show();
+              }
+            });
         });
+
         $("#update-form").submit(function (e) {
           e.preventDefault();
 
           var email = $("#updated-email").val();
           var pass = $("#updated-password").val();
-          //var id = $("#register-id").val();
 
           var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
           var passwordRegex = /^[A-Z0-9]+$/;
-          //var idRegex = /^\d{9}$/;
 
           if (!emailRegex.test(email)) {
             Swal.fire({
@@ -115,10 +113,6 @@
               title: "Invalid password",
             });
           } else {
-            // Swal.fire({
-            //   icon: "success",
-            //   title: "Form submitted successfully",
-            // });
             const newUser = {
               Name: $("#updated-name").val(),
               Email: $("#updated-email").val(),
@@ -131,59 +125,30 @@
               updateSCBF,
               updateECBF
             );
-
             return status;
           }
         });
-
-        // document
-        //   .getElementById("filter-price-btn")
-        //   .addEventListener("click", () => {
-        //     const price = document.getElementById("price-input").value;
-        //     if (price) {
-        //       fetchFilteredGamesByPrice(price);
-        //     } else {
-        //       const zero = 0;
-        //       fetchFilteredGamesByPrice(zero);
-        //     }
-        //   });
-
-        // document
-        //   .getElementById("filter-rank-btn")
-        //   .addEventListener("click", () => {
-        //     const rank = document.getElementById("rank-input").value;
-        //     if (rank) {
-        //       fetchFilteredGamesByRank(rank);
-        //     } else {
-        //       const zero = 0;
-        //       fetchFilteredGamesByRank(zero);
-        //     }
-        //   });
-        //EndUpdateForm
-        //console.log(userData.name);
       });
       //UpdateForm
       function updateSCBF(status) {
-        if (status == -1) {
+        if (status == null) {
           alert("Email already exists , try again");
-          // const updateForm = document.getElementById("update-form");
-          // RegisterForm.reset();
           document.getElementById("updated-name").value = userData.name || "";
           document.getElementById("updated-email").value = userData.email || "";
           document.getElementById("updated-password").value =
             userData.password || "";
         } else {
-          //alert("Updated successful! Please log in.");
           Swal.fire({
             icon: "success",
             title: "Your details were updated!",
             confirmButtonText: "OK",
           }).then((result) => {
             if (result.isConfirmed) {
+              localStorage.setItem("user", JSON.stringify(status));
               $("#update-form").hide();
-              $("#filter-controls").show();
-              $("#my-wish-list").show();
-              $("#game-container").show();
+              $("#games-header").show();
+              $("#games-container").show();
+              window.location.reload();
             }
           });
         }
@@ -194,21 +159,6 @@
       }
 
       //EndUpdateForm
-
-      // function getUserOnNavBar(userData) {
-      //   userDetailsPlaceHolder = document.getElementById("user-details");
-      //   if (!userDetailsPlaceHolder) {
-      //     console.error("Navbar placeHolder NOT FOUND");
-      //     return;
-      //   }
-      //   const detTemplate = `
-      //   <div class="currentUser" ">
-      //     <div class="card-details">
-      //       <p id="card-current-name" class="card-text">Welcome ,  ${userData.name}</p>
-      //     </div>
-      //   </div> `;
-      //   userDetailsPlaceHolder.innerHTML = detTemplate;
-      // }
 
       const getGameHTMLCard = (game) => {
         const platforms = [];
@@ -268,23 +218,6 @@
       };
 
       function addToFavorites(appID, id) {
-        // const newGameToList = gamesList.find((g) => g.AppID == game.AppID);
-        // if (newGameToList) {
-        //   let gameDet = {
-        //     AppID: newGameToList.AppID,
-        //     Name: newGameToList.Name,
-        //     ReleaseDate: new Date(newGameToList.Release_date).toISOString(),
-        //     Price: newGameToList.Price,
-        //     Description: newGameToList.description,
-        //     HeaderImage: newGameToList.Header_image,
-        //     Website: newGameToList.Website,
-        //     Windows: newGameToList.Windows.toUpperCase() === "TRUE",
-        //     Linux: newGameToList.Linux.toUpperCase() === "TRUE",
-        //     ScoreRank: newGameToList.Score_rank,
-        //     Recommendations: newGameToList.Recommendations,
-        //     Publisher: newGameToList.Developers,
-        //   };
-
         ajaxCall(
           "POST",
           `${api}/addToFavorites/id/${id}/appID/${appID}`,
@@ -317,8 +250,6 @@
         alert("change your Filters!");
         return templateWrapper;
       };
-
-      //let gamesList = [...GAME];
 
       const renderAvailableGames = (id) => {
         ajaxCall(
@@ -389,66 +320,42 @@
       .game-card button:hover {
         background-color: #d32f2f;
       }
+
       .button-style {
         display: inline-block;
         padding: 10px 20px;
         color: white;
         text-decoration: none;
-        background-color: #ff001d; /* Button color */
+        background-color: #ff001d;
         border: none;
-        border-radius: 5px; /* Rounded corners */
+        border-radius: 5px;
         font-size: 16px;
-        cursor: pointer; /* Changes cursor to pointer on hover */
+        cursor: pointer;
         text-align: center;
       }
 
       .button-style:hover {
-        background-color: #0056b3; /* Darker shade on hover */
+        background-color: #0056b3;
         text-decoration: none;
       }
-      /* .navbar ul.navbar-list {
-        width: 100%;
-        list-style: none;
-        background: #76a386;
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        flex-wrap: wrap;
-        flex-direction: row;
-      } */
 
       .top-page {
         position: sticky;
         top: 0;
         z-index: 2;
       }
-
-      /* nav li {
-        height: 30px;
-        display: block;
-        align-items: center;
-        justify-content: center;
-        padding: 0 30px;
-        margin-top: 10px;
-      } */
     </style>
   </head>
   <body>
-    <!-- Navbar -->
-    <!-- <nav class="navbar">
-      <div class="navbar-container">
-        <a href="LoginNew.html" class="navbar-link button-style">Log Out</a>
-        <a href="MyGames.html" class="navbar-link">User List</a>
-        <div id="user-name" class="navbar-username"></div>
-      </div>
-    </nav> -->
     <!-- Navbar -->
     <section class="top-page">
       <nav class="navbar">
         <div id="navbar-list">
           <div id="user-details" class="navbar-link"></div>
           <div id="navbar-right-side">
-            <div><a href="MyGames.html" class="navbar-link">User List</a></div>
+            <div>
+              <a href="MyGames.html" class="navbar-link">My Wish List</a>
+            </div>
             <div>
               <a href="LoginNew.html" class="navbar-link button-style"
                 >Log Out</a
@@ -459,17 +366,6 @@
       </nav>
     </section>
 
-    <!-- <section class="top-page">
-      <nav class="navbar">
-        <ul id="navbar-list">
-          <li id="user-details" class="navbar-link"></li>
-          <li><a href="MyGames.html" class="navbar-link">User List</a></li>
-          <li>
-            <a href="LoginNew.html" class="navbar-link button-style">Log Out</a>
-          </li>
-        </ul>
-      </nav>
-    </section> -->
     <button
       id="update-details"
       class="Edit_btn_color"
@@ -516,7 +412,7 @@
       </div>
     </form>
     <!-- end -->
-    <h1>Games List</h1>
+    <h1 id="games-header">Games List</h1>
     <div id="games-container">
       <div id="game-cards" class="game-container"></div>
     </div>
