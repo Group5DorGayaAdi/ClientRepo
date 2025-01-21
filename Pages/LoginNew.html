@@ -21,11 +21,11 @@
     <link href="../CSS/LoginStyleSheet.css" rel="stylesheet" />
     <script>
       $(document).ready(function () {
-        // let port = 7048;
-        // server = `https://localhost:${port}/`;
-        // api = server + "api/Users";
+        let port = 7048;
+        server = `https://localhost:${port}/`;
+        api = server + "api/Users";
 
-        api = "https://proj.ruppin.ac.il/igroup5/test2/tar1/api/Users";
+        // api = "https://proj.ruppin.ac.il/igroup5/test2/tar1/api/Users";
 
         $("#register-form").hide();
 
@@ -95,15 +95,19 @@
         });
 
         function getSCBF(status) {
-          if (status == null) {
-            alert("user not found");
+          if (status === null) {
+            alert("user not active");
             const loginForm = document.getElementById("login-form");
             loginForm.reset();
           } else {
             localStorage.setItem("user", JSON.stringify(status));
+            const title =
+              status.email === "admin@admin.com"
+                ? "Welcome back, BOSS!"
+                : "Welcome back!";
             Swal.fire({
               icon: "success",
-              title: "Welcome back!",
+              title: title,
               confirmButtonText: "OK",
             }).then((result) => {
               if (result.isConfirmed) {
@@ -115,9 +119,29 @@
 
         function getECBF(err) {
           console.log(err);
-          alert("Password or Email invalid. Try again or Register!");
-          const loginForm = document.getElementById("login-form");
-          loginForm.reset();
+          console.log(err.responseJSON.message);
+          if (err.responseJSON) {
+            errorMessage = err.responseJSON.message;
+            console.log(errorMessage);
+            if (errorMessage === "User not active.") {
+              title = "User is not active.";
+              text = "Please contact the administrator for more information.";
+              // alert("User is not active. Contact the Admin!");
+            } else {
+              title = "Password or Email invalid.";
+              text = "Try again or Register!";
+              // alert("Password or Email invalid. Try again or Register!");
+            }
+          }
+          Swal.fire({
+            icon: "error",
+            title: title,
+            text: text,
+            confirmButtonText: "OK",
+          }).then((result) => {
+            const loginForm = document.getElementById("login-form");
+            loginForm.reset();
+          });
         }
 
         $("#register-form").submit(function (e) {
@@ -165,14 +189,28 @@
             Swal.fire({
               icon: "success",
               title: "Registration successful!",
-              text: "You can now log in with your credentials.",
+              //text: "You can now log in with your credentials.",
               confirmButtonText: "OK",
             }).then((result) => {
               if (result.isConfirmed) {
-                $("#register-form").hide();
-                $("#login-form").show();
-                $("#toggle-register").show();
-                $("#login-form").show();
+                newUser = {
+                  Id: 0,
+                  Name: $("#register-name").val(),
+                  Email: $("#register-email").val(),
+                  Password: $("#register-password").val(),
+                };
+                ajaxCall(
+                  "POST",
+                  `${api}/Login`,
+                  JSON.stringify(newUser),
+                  getSCBF,
+                  getECBF
+                );
+                return status;
+                // $("#register-form").hide();
+                // $("#login-form").show();
+                // $("#toggle-register").show();
+                // $("#login-form").show();
 
                 const RegisterForm = document.getElementById("register-form");
                 RegisterForm.reset();
@@ -211,7 +249,7 @@
             placeholder="Enter your Password"
             required
           />
-
+          <!-- <p id="login-feedback" class="feedback"></p> -->
           <input type="submit" value="Login" />
         </form>
 

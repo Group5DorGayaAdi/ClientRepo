@@ -19,12 +19,14 @@
     <script src="../JS/navBar.js"></script>
     <link rel="stylesheet" href="../CSS/StyleSheet.css" />
     <script>
-      const serverU = "https://proj.ruppin.ac.il/igroup5/test2/tar1/api/Users";
+      //const serverU = "https://proj.ruppin.ac.il/igroup5/test2/tar1/api/Users";
+      const serverU = "https://localhost:7048/api/Users";
 
       $(document).ready(function () {
-        // let port = 7048;
-        // server = `https://localhost:${port}/`;
-        api = "https://proj.ruppin.ac.il/igroup5/test2/tar1/api/Games";
+        let port = 7048;
+        server = `https://localhost:${port}/`;
+        //api = "https://proj.ruppin.ac.il/igroup5/test2/tar1/api/Games";
+        api = server + "api/Games";
 
         renderAvailableGames(userData.id);
         if (!userData) {
@@ -33,6 +35,10 @@
           return;
         }
         getUserOnNavBar(userData);
+
+        if (userData.email === "admin@admin.com") {
+          document.getElementById("admin-btn").style.display = "block";
+        }
 
         //UpdateForm
         $("#update-form").hide();
@@ -91,6 +97,10 @@
                 $("#games-container").show();
               }
             });
+        });
+
+        $("#admin-btn").click(function () {
+          window.location.href = "./adminPageNew.html";
         });
 
         $("#update-form").submit(function (e) {
@@ -361,6 +371,16 @@
                 >Log Out</a
               >
             </div>
+            <div id="navbar-right-side">
+              <button
+                id="admin-btn"
+                class="navbar-link button-style"
+                style="display: none"
+              >
+                Admin
+              </button>
+              <!-- <a href="adminPage.html" id="dmin-btn" class="navbar-link" style="display: none" >Admin</a> -->
+            </div>
           </div>
         </div>
       </nav>
@@ -388,6 +408,7 @@
     >
       Edit Details
     </button>
+
     <!-- UpdateForm -->
     <form id="update-form" action="">
       <h2>My Details</h2>
