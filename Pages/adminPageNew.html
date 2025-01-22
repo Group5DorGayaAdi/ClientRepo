@@ -16,6 +16,7 @@
     <script src="../JS/ajaxcalls.js"></script>
     <script src="../JS/navBar.js"></script>
     <link rel="stylesheet" href="../CSS/StyleSheet.css" />
+    <link rel="stylesheet" href="../CSS/adminStyle.css" />
     <script>
 
       const apiGamesUrl = "https://localhost:7048/api/Games"; 
@@ -76,7 +77,6 @@
               title: "Failed to load data. Please check your server.",
               confirmButtonText: "OK",
             })
-            // alert("Failed to load data. Please check your server.");
           }
         );
 
@@ -88,7 +88,7 @@
 
         ajaxCall(
           "GET",
-          `${apiUsersUrl}/GetList`,
+          `${apiUsersUrl}/GetUsersAdminList`,
           "",
           (data) => {
 
@@ -102,15 +102,12 @@
               columns: [
                 { data: "id" },
                 { data: "name" },
-                { data: "email" },
-                {
-                  data: "password",
-                },
+                { data: "numOfPurcheses" },
+                { data: "amountSpent" },
                 {
                     data: "isActive",
                     title: "Active Status",
                     render:  function (data, type, row) {
-                        console.log("Row data:", row);
                     return `<input type="checkbox" class="active-toggle" data-id="${row.id}" ${data ? "checked" : ""}>`;
                     }
                 },
@@ -122,7 +119,6 @@
                 const userId = $(this).data("id");
                 const isActive = $(this).is(":checked");
 
-                // Send the update to the server
                 updateUserStatus(userId, isActive);
             });
           },
@@ -132,7 +128,6 @@
               title: "Failed to load data. Please check your server.",
               confirmButtonText: "OK",
             })
-            // alert("Failed to load data. Please check your server.");
           }
         );
       }
@@ -151,7 +146,6 @@
               title: "User status updated successfully!",
               confirmButtonText: "OK",
             })
-            // alert(`User status updated successfully!`);
             },
             () => {
                 Swal.fire({
@@ -159,184 +153,18 @@
               title: "Failed to update user status.",
               confirmButtonText: "OK",
             })
-            // alert(`Failed to update user status.`);
             }
         );
         }
     </script>
-    <style>
-        body {
-        background-color: #0c1622;
-        color: #fff;
-        padding: 20px;
-        }
-
-        h1 {
-            text-align: center;
-            font-family: "Nunito", sans-serif;
-        }
-
-        #gamesTable, #usersTable {
-            border-collapse: collapse;
-            width: 100%;
-            background-color: #1a1a2e;
-        }
-
-        #gamesTable th, #gamesTable td,  #usersTable th, #usersTable td{
-            border: 1px solid #444;
-            padding: 12px; 
-        }
-
-        #gamesTable tr:hover, #usersTable tr:hover {
-            background-color: #333;
-        }
-
-        .dataTables_length, .dataTables_filter{
-            margin-bottom: 15px;
-        }
-
-        .dataTables_length select {
-            color: white;
-            background-color: #1a1a2e;
-            border: 1px solid #444; 
-            padding: 5px;
-            border-radius: 4px;
-        }
-
-        .dataTables_filter input {
-            color: white; 
-            background-color: #1a1a2e;
-            border: 1px solid #444; 
-            padding: 5px; 
-            border-radius: 4px;
-        }
-
-
-        .dataTables_length select option {
-            color: white;
-            background-color: #1a1a2e; 
-        }
-
-        .button-style {
-            display: inline-block;
-            padding: 10px 20px;
-            color: white;
-            text-decoration: none;
-            background-color: #ff001d;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            text-align: center;
-        }
-
-        .button-style:hover {
-            background-color: #0056b3;
-            text-decoration: none;
-        }
-
-        .top-page {
-            position: sticky;
-            top: 0;
-            z-index: 2;
-        }
-
-        td:last-child, th:last-child {
-            text-align: center;
-            vertical-align: middle; 
-        }
-
-        td:last-child input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            cursor: pointer; 
-            accent-color: #ff001d; 
-            border: 2px solid white;
-            border-radius: 4px;
-        }
-
-        .switcher-container {
-            text-align: center;
-        }
-
-        h2 {
-            color: #fff;
-            font-size: 16px;
-            font-family: "Nunito", sans-serif;
-        }
-
-        .switcher {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-        }
-
-        .radio-label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-family: "Nunito", sans-serif;
-            font-size: 14px;
-            color: white;
-            cursor: pointer;
-        }
-
-        .radio-label input[type="radio"] {
-            display: none;
-        }
-
-        .radio-label span {
-            position: relative;
-            padding-left: 20px;
-            cursor: pointer;
-        }
-
-        .radio-label span:before {
-            content: "";
-            width: 12px;
-            height: 12px;
-            border: 2px solid white;
-            border-radius: 50%;
-            position: absolute;
-            left: 0;
-            top: 40%;
-            transform: translateY(-50%);
-            background-color: transparent;
-            transition: background-color 0.3s, border-color 0.3s;
-        }
-
-        .radio-label input[type="radio"]:checked + span:before {
-            background-color: #ff001d;
-            border-color: #ff001d;
-        }
-
-        .radio-label input[type="radio"]:hover + span:before {
-             border-color: #0056b3; 
-        }
-    </style>
+   
   </head>
   <body>
-
-     <!-- Navbar -->
      <section class="top-page">
         <nav class="navbar">
           <div id="navbar-list">
             <div id="user-details" class="navbar-link"></div>
-            <div class="switcher-container">
-                <h2>Switch Table View</h2>
-                <div class="switcher">
-                    <label for="gamesRadio" class="radio-label">
-                  <input type="radio" id="gamesRadio" name="tableSwitcher" checked />
-                  <span>Games</span>
-                  </label>
-                  
-            
-                  <label for="usersRadio" class="radio-label">
-                    <input type="radio" id="usersRadio" name="tableSwitcher" />
-                    <span>Users</span>
-                  </label>
-                </div>
-              </div>
+          
             <div id="navbar-right-side">
               <div>
                 <a href="MyGames.html" class="navbar-link">My Wish List</a>
@@ -357,6 +185,20 @@
 
     <h1>Games&Users</h1>
 
+    <div class="switcher-container">
+        <h2>Switch Table View</h2>
+        <div class="switcher">
+            <label for="gamesRadio" class="radio-label">
+          <input type="radio" id="gamesRadio" name="tableSwitcher" checked />
+          <span>Games</span>
+          </label>
+          <label for="usersRadio" class="radio-label">
+            <input type="radio" id="usersRadio" name="tableSwitcher" />
+            <span>Users</span>
+          </label>
+        </div>
+      </div>
+
     <table id="gamesTable" class="display" style="width: 100%;" >
       <thead>
         <tr>
@@ -373,8 +215,10 @@
           <tr>
             <th>User's ID</th>
             <th>User's Name</th>
-            <th>User's Email</th>
-            <th>User's Password</th>
+            <!-- <th>User's Email</th>
+            <th>User's Password</th> -->
+            <th>Number of games purchased</th>
+            <th>Purchase amount</th>
             <th>Active status</th>
           </tr>
         </thead>

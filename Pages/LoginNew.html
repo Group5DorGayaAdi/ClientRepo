@@ -44,8 +44,6 @@
             cancelButtonText: "No, stay here",
           }).then((result) => {
             if (result.isConfirmed) {
-              //$("#register-form").reset();
-              // Hide the form and reset fields
               $("#register-form").hide();
               $("#login-form").show();
               $("#toggle-register").show();
@@ -126,11 +124,9 @@
             if (errorMessage === "User not active.") {
               title = "User is not active.";
               text = "Please contact the administrator for more information.";
-              // alert("User is not active. Contact the Admin!");
             } else {
               title = "Password or Email invalid.";
               text = "Try again or Register!";
-              // alert("Password or Email invalid. Try again or Register!");
             }
           }
           Swal.fire({
@@ -189,7 +185,6 @@
             Swal.fire({
               icon: "success",
               title: "Registration successful!",
-              //text: "You can now log in with your credentials.",
               confirmButtonText: "OK",
             }).then((result) => {
               if (result.isConfirmed) {
@@ -206,11 +201,8 @@
                   getSCBF,
                   getECBF
                 );
+
                 return status;
-                // $("#register-form").hide();
-                // $("#login-form").show();
-                // $("#toggle-register").show();
-                // $("#login-form").show();
 
                 const RegisterForm = document.getElementById("register-form");
                 RegisterForm.reset();
@@ -229,7 +221,6 @@
     <h1>Welcome</h1>
     <div class="container">
       <div class="login-section">
-        <!-- Login Form -->
         <form id="login-form" action="">
           <h2>Login</h2>
           <label for="login-email">Email:</label>
@@ -249,11 +240,9 @@
             placeholder="Enter your Password"
             required
           />
-          <!-- <p id="login-feedback" class="feedback"></p> -->
           <input type="submit" value="Login" />
         </form>
 
-        <!-- Register Form -->
         <form id="register-form" action="">
           <h2>Register</h2>
           <label for="register-name">* Name:</label>

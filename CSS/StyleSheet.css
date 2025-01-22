@@ -17,6 +17,12 @@
   overflow: hidden;
 }
 
+.top-page {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
 .card img {
   width: 100%;
   height: 200px;
@@ -61,7 +67,6 @@
   color: #fff;
   padding: 10px 20px;
   display: flex;
-  /* justify-content: center; */
   justify-content: space-between;
   align-items: center;
   position: sticky;
@@ -69,18 +74,19 @@
   z-index: 1000;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
 #navbar-list {
   list-style: none;
   display: flex;
   flex-direction: row;
   align-items: center;
-  /* justify-content: center; */
   justify-content: space-between;
   gap: 30px;
   margin: 0;
   padding: 0;
   width: 100%;
 }
+
 .navbar-link {
   font-family: "Nunito", sans-serif;
   color: #ffffff;
@@ -92,6 +98,7 @@
   padding: 5px 10px;
   transition: color 0.3s ease;
 }
+
 #navbar-right-side {
   list-style: none;
   display: flex;
@@ -100,17 +107,11 @@
   gap: 40px;
 }
 
-/* .card-details {
-  font-family: "Nunito", sans-serif;
-  color: #ffffff;
-  font-size: 1rem;
-  text-decoration: none;
-  justify-content: center;
-} */
 .navbar-link:hover {
   text-decoration: underline;
   color: #76a386;
-} /* ✅ Logout Button Styling */
+}
+
 .logout-btn {
   background-color: #d32f2f;
   color: #fff;
@@ -122,43 +123,16 @@
   font-family: "Nunito", sans-serif;
   transition: background-color 0.3s ease;
 }
+
 .logout-btn:hover {
   background-color: #9a0007;
-} /* ✅ User Details (Player Name Styling) */
+}
+
 #user-details {
   font-family: "Nunito", sans-serif;
   font-size: 1rem;
   color: #ffffff;
 }
-
-/* .navbar {
-  background-color: #1e293b;
-  color: #fff;
-  padding: 10px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.navbar-container {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-} */
-
-/* .navbar-link {
-  color: #fff;
-  font-family: Nunito, sans-serif;
-  font-size: 1rem;
-} */
-
-/* .navbar-link:hover {
-  text-decoration: underline;
-} */
 
 .logout-btn {
   background-color: #d32f2f;
@@ -175,15 +149,10 @@
   background-color: #9a0007;
 }
 
-/* ✅ Update Form Styling */
 #update-form {
-  background: linear-gradient(
-    to bottom,
-    #6f627e,
-    #4f455a
-  ); /* Gradient Background */
+  background: linear-gradient(to bottom, #6f627e, #4f455a);
   border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   padding: 30px;
   max-width: 400px;
   margin: 50px auto;
@@ -191,14 +160,12 @@
   text-align: center;
 }
 
-/* ✅ Form Title */
 #update-form h2 {
   font-size: 24px;
   margin-bottom: 20px;
   color: #fff;
 }
 
-/* ✅ Form Labels */
 #update-form label {
   display: block;
   text-align: left;
@@ -207,7 +174,6 @@
   color: #e0e0e0;
 }
 
-/* ✅ Form Inputs */
 #update-form input[type="text"],
 #update-form input[type="email"],
 #update-form input[type="password"] {
@@ -220,7 +186,6 @@
   font-size: 14px;
 }
 
-/* ✅ Password Toggle Button */
 #update-form .password-container {
   position: relative;
   margin-bottom: 15px;
@@ -247,18 +212,15 @@
   color: #4f455a;
 }
 
-/* ✅ Submit Button */
-/* ✅ Form Buttons Container */
 .form-buttons {
   display: flex;
-  justify-content: space-between; /* Space buttons apart */
+  justify-content: space-between;
   gap: 10px;
   margin-top: 20px;
 }
 
-/* ✅ Cancel Button */
 .cancel-btn {
-  background-color: #d32f2f; /* Red for cancel */
+  background-color: #d32f2f;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -272,9 +234,8 @@
   background-color: #9a0007;
 }
 
-/* ✅ Update Button (Submit) */
 #update-form input[type="submit"] {
-  background-color: #6a37d6; /* Purple color */
+  background-color: #6a37d6;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -288,7 +249,6 @@
   background-color: #5725b4;
 }
 
-/* ✅ Optional: Responsive Styling */
 @media (max-width: 480px) {
   #update-form {
     padding: 20px;

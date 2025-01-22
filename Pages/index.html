@@ -18,6 +18,7 @@
     <script src="../JS/ajaxcalls.js"></script>
     <script src="../JS/navBar.js"></script>
     <link rel="stylesheet" href="../CSS/StyleSheet.css" />
+    <link rel="stylesheet" href="../CSS/gamesStyle.css" />
     <script>
       //const serverU = "https://proj.ruppin.ac.il/igroup5/test2/tar1/api/Users";
       const serverU = "https://localhost:7048/api/Users";
@@ -40,13 +41,11 @@
           document.getElementById("admin-btn").style.display = "block";
         }
 
-        //UpdateForm
         $("#update-form").hide();
 
         const togglePassword = document.getElementById("toggle-password");
         const passwordInput = document.getElementById("updated-password");
 
-        // Check if both elements exist
         if (togglePassword && passwordInput) {
           togglePassword.addEventListener("click", () => {
             if (passwordInput.type === "password") {
@@ -61,17 +60,10 @@
           console.error("Password input or toggle button not found.");
         }
 
-        if (!userData) {
-          console.error("No user data found in local storage!");
-          window.location.href = "./LoginNew.html";
-          return;
-        }
-
         getUserOnNavBar(userData);
 
         $("#update-details").click(function () {
           $("#update-form").show();
-          //$("#filter-controls").hide();
           $("#games-header").hide();
           $("#games-container").hide();
           document.getElementById("updated-name").value = userData.name || "";
@@ -91,7 +83,6 @@
             })
             .then((result) => {
               if (result.isConfirmed) {
-                // Hide the form and reset fields
                 $("#update-form").hide();
                 $("#games-header").show();
                 $("#games-container").show();
@@ -139,14 +130,20 @@
           }
         });
       });
-      //UpdateForm
+
       function updateSCBF(status) {
         if (status == null) {
-          alert("Email already exists , try again");
-          document.getElementById("updated-name").value = userData.name || "";
-          document.getElementById("updated-email").value = userData.email || "";
-          document.getElementById("updated-password").value =
-            userData.password || "";
+          Swal.fire({
+            icon: "error",
+            title: "Email already exists , try again",
+            confirmButtonText: "OK",
+          }).then((result) => {
+            document.getElementById("updated-name").value = userData.name || "";
+            document.getElementById("updated-email").value =
+              userData.email || "";
+            document.getElementById("updated-password").value =
+              userData.password || "";
+          });
         } else {
           Swal.fire({
             icon: "success",
@@ -165,10 +162,17 @@
       }
 
       function updateECBF(err) {
-        console.log(err);
+        Swal.fire({
+          icon: "error",
+          title: "Email already exists , try again",
+          confirmButtonText: "OK",
+        }).then((result) => {
+          document.getElementById("updated-name").value = userData.name || "";
+          document.getElementById("updated-email").value = userData.email || "";
+          document.getElementById("updated-password").value =
+            userData.password || "";
+        });
       }
-
-      //EndUpdateForm
 
       const getGameHTMLCard = (game) => {
         const platforms = [];
@@ -288,76 +292,8 @@
         console.log(error);
       }
     </script>
-    <style>
-      body {
-        background-color: #0c1622;
-        color: #fff;
-        padding: 20px;
-      }
-
-      h1 {
-        text-align: center;
-        font-family: Silkscreen;
-      }
-
-      .game-container {
-        font-family: Nunito;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-        justify-content: center;
-      }
-
-      .game-card {
-        width: 300px;
-        background-color: #1e293b;
-        border-radius: 10px;
-        padding: 15px;
-        text-align: left;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      }
-
-      .game-card button {
-        margin-top: 10px;
-        background-color: #4caf50;
-        color: #fff;
-        border: none;
-        padding: 10px 15px;
-        border-radius: 5px;
-        cursor: pointer;
-      }
-
-      .game-card button:hover {
-        background-color: #d32f2f;
-      }
-
-      .button-style {
-        display: inline-block;
-        padding: 10px 20px;
-        color: white;
-        text-decoration: none;
-        background-color: #ff001d;
-        border: none;
-        border-radius: 5px;
-        font-size: 16px;
-        cursor: pointer;
-        text-align: center;
-      }
-
-      .button-style:hover {
-        background-color: #0056b3;
-        text-decoration: none;
-      }
-
-      .top-page {
-        position: sticky;
-        top: 0;
-        z-index: 2;
-      }
-    </style>
   </head>
   <body>
-    <!-- Navbar -->
     <section class="top-page">
       <nav class="navbar">
         <div id="navbar-list">
@@ -367,11 +303,6 @@
               <a href="MyGames.html" class="navbar-link">My Wish List</a>
             </div>
             <div>
-              <a href="LoginNew.html" class="navbar-link button-style"
-                >Log Out</a
-              >
-            </div>
-            <div id="navbar-right-side">
               <button
                 id="admin-btn"
                 class="navbar-link button-style"
@@ -379,7 +310,11 @@
               >
                 Admin
               </button>
-              <!-- <a href="adminPage.html" id="dmin-btn" class="navbar-link" style="display: none" >Admin</a> -->
+            </div>
+            <div>
+              <a href="LoginNew.html" class="navbar-link button-style"
+                >Log Out</a
+              >
             </div>
           </div>
         </div>
@@ -409,7 +344,6 @@
       Edit Details
     </button>
 
-    <!-- UpdateForm -->
     <form id="update-form" action="">
       <h2>My Details</h2>
       <label for="register-name">Name:</label>
@@ -432,7 +366,6 @@
         <input type="submit" value="Update" />
       </div>
     </form>
-    <!-- end -->
     <h1 id="games-header">Games List</h1>
     <div id="games-container">
       <div id="game-cards" class="game-container"></div>

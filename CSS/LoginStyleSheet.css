@@ -59,12 +59,6 @@ h2 {
 .login-section input[type="submit"] {
   background-color: #5d41bc;
   color: white;
-  /* padding: 12px;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s; */
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
@@ -99,7 +93,7 @@ h2 {
 }
 
 .cancel-btn {
-  background-color: #d32f2f; /* Red for cancel */
+  background-color: #d32f2f;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -115,7 +109,7 @@ h2 {
 
 .form-buttons {
   display: flex;
-  justify-content: space-between; /* Space buttons apart */
+  justify-content: space-between;
   gap: 10px;
   margin-top: 20px;
 }
