@@ -20,14 +20,14 @@
     <link rel="stylesheet" href="../CSS/StyleSheet.css" />
     <link rel="stylesheet" href="../CSS/gamesStyle.css" />
     <script>
-      //const serverU = "https://proj.ruppin.ac.il/igroup5/test2/tar1/api/Users";
-      const serverU = "https://localhost:7048/api/Users";
+      const serverU = "https://proj.ruppin.ac.il/igroup5/test2/tar1/api/Users";
+      //const serverU = "https://localhost:7048/api/Users";
 
       $(document).ready(function () {
-        let port = 7048;
-        server = `https://localhost:${port}/`;
-        //api = "https://proj.ruppin.ac.il/igroup5/test2/tar1/api/Games";
-        api = server + "api/Games";
+        // let port = 7048;
+        // server = `https://localhost:${port}/`;
+        api = "https://proj.ruppin.ac.il/igroup5/test2/tar1/api/Games";
+        // api = server + "api/Games";
 
         renderAvailableGames(userData.id);
         if (!userData) {
